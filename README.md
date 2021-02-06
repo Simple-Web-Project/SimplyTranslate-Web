@@ -2,8 +2,6 @@
 
 This is a simple web interface for SimplyTranslate
 
-PRs Welcome!
-
 ## How to install/use
 ### Clone simplytranslate_engines repository and install it
 ```sh
