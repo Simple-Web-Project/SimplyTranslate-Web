@@ -1,5 +1,15 @@
 <!doctype html>
 
+{% macro lang_option(lang_name, current_lang) %}
+    <option value="{{ lang_name }}" {{ 'selected' if current_lang == lang_name else '' }}>{{ lang_name }}</option>
+{% endmacro %}
+
+{% macro supported_lang_options(current_lang) %}
+    {% for lang_name in supported_languages.keys() %}
+        {{ lang_option(lang_name, current_lang) }}
+    {% endfor %}
+{% endmacro %}
+
 <html>
     <head>
         <title>SWT - Simple Web Translator</title>
@@ -10,22 +20,25 @@
     <body>
         <h1>Simple Web Translator</h1>
 
-        <form action="/" method="POST">
-            <label>
-                Translation Engine:
-                <select name="engine">
-                    <option value="google" {{'selected' if engine == 'google' else ''}}>Google</option>
-                    <option value="libre" {{'selected' if engine != 'google' else ''}}>LibreTranslate</option>
-                </select>
-            </label>
+        <form action="/?engine={{ engine }}" method="POST">
+            Translation Engine:
+
+            <button type="submit" formaction="/?engine=google&switchengine=true" formmethod="POST">Google</button>
+            <button type="submit" formaction="/?engine=libre&switchengine=true" formmethod="POST">LibreTranslate</button>
+
             <br>
             <br>
 
             <div id="fields_container">
-
                 <div id="language_fields_container">
-                    <input type="text" id="from_language" name="from_language" value="{{ from_l }}" placeholder="from" />
-                    <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
+                    <select name="from_language" id="from_language">
+                        {{ lang_option('Autodetect', from_l) }}
+                        {{ supported_lang_options(from_l) }}
+                    </select>
+
+                    <select name="to_language" id="to_language">
+                        {{ supported_lang_options(to_l) }}
+                    </select>
                 </div>
 
                 <br>
@@ -35,7 +48,7 @@
 
             <br>
 
-            <button type="submit">Translate!</button>
+	    <button type="submit">Translate with {{ engine }}!</button>
         </form>
 
         <br>
