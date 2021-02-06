@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+}
+
+#from_language, #to_language {
+    width: 48%;
+    box-sizing: border-box;
+}
+
+#language_fields_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#fields_container {
+    width: 20rem;
+    margin: auto;
+}

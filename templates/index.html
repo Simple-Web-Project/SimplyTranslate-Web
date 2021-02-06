@@ -1,0 +1,56 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>SWT - Simple Web Translator</title>
+        <link rel="stylesheet" href="/static/home.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+
+    <body>
+        <h1>Simple Web Translator</h1>
+
+        <form action="/" method="POST">
+            <label>
+                Translation Engine:
+                <select name="engine">
+                    <option value="google" {{'selected' if engine == 'google' else ''}}>Google</option>
+                    <option value="libre" {{'selected' if engine != 'google' else ''}}>LibreTranslate</option>
+                </select>
+            </label>
+            <br>
+            <br>
+
+            <div id="fields_container">
+
+                <div id="language_fields_container">
+                    <input type="text" id="from_language" name="from_language" value="{{ from_l }}" placeholder="from" />
+                    <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
+                </div>
+
+                <br>
+
+                <textarea id="input" name="input" rows="5" placeholder="text you want to translate">{{ inp }}</textarea>
+            </div>
+
+            <br>
+
+            <button type="submit">Translate!</button>
+        </form>
+
+        <br>
+
+        {% if translation %}
+            <b>Translation ({{ engine }}):</b><br>
+            {{ translation }}
+        {% endif %}
+
+        <br>
+        <br>
+        <br>
+
+        <footer>
+              <a href="https://git.sr.ht/~metalune/SimpleWebTranslator">Source for this Website</a>
+        </footer>
+    </body>
+</html>
