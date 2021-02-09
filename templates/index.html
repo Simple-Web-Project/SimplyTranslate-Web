@@ -54,8 +54,11 @@
         <br>
 
         {% if translation %}
-            <b>Translation ({{ engine }}):</b><br>
-            {{ translation }}
+            <b>Translation ({{ engine }}):</b>
+            {# This is wrapped in a `div` so that we can center it while keeping the
+            text left-aligned.
+            #}
+            <div><pre id="translated_text_container">{{ translation }}</pre></div>
         {% endif %}
 
         <br>

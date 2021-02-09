@@ -21,3 +21,17 @@ body {
     width: 20rem;
     margin: auto;
 }
+
+#translated_text_container {
+    /* Don't use the monospace default. */
+    font-family: inherit;
+
+    /* Remove the default top and bottom margins. */
+    margin: 0;
+
+    /* Make it not take the whole width. */
+    display: inline-block;
+
+    /* Align the translated text to the start. */
+    text-align: start;
+}
