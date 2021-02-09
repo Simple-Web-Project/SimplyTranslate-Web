@@ -17,6 +17,11 @@ git clone https://git.sr.ht/~metalune/simplytranslate_web
 cd simplytranslate_web
 ``` 
 
+### Install the dependencies
+```sh
+pip install -r requirements.txt
+```
+
 ### Run the main.py
 ```sh
 # Directly
