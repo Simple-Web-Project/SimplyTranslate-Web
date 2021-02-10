@@ -16,7 +16,7 @@ def to_short_name(long_name, supported_languages):
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
 )
 async def translate(from_language, to_language, input_text):
-    return await gtranslate.translate(
+    return gtranslate.translate(
         input_text, from_language=from_language, to_language=to_language
     )
 
