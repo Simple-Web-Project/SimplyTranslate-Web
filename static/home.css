@@ -34,4 +34,8 @@ body {
 
     /* Align the translated text to the start. */
     text-align: start;
+
+    /* Fix overflow (e.g. on mobile) */
+    white-space: pre-wrap;
+    word-break: break-all;
 }
