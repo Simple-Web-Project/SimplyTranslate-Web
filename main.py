@@ -5,12 +5,21 @@ import simplytranslate_engines.libretranslate as libre
 
 app = Quart(__name__)
 
-# TODO: find a better name.
-def to_short_name(long_name, supported_languages):
-    if long_name == "Autodetect":
+def to_lang_code(lang, supported_languages):
+    lang = lang.lower()
+
+    if lang == "autodetect" or lang == "auto":
         return "auto"
 
-    return supported_languages[long_name]
+    for key in supported_languages.keys():
+        if key.lower() == lang:
+            return supported_languages[key]
+
+    for value in supported_languages.values():
+        if value.lower() == lang:
+            return value
+
+    return None
 
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
@@ -52,15 +61,17 @@ async def index():
         if translation_engine == "libre":
             translation = libre.translate(
                 inp,
-                to_language=supported_languages[to_lang],
-                from_language=to_short_name(from_lang, supported_languages),
+                to_language=to_lang_code(to_lang, supported_languages),
+                from_language=to_lang_code(from_lang, supported_languages),
             )
         elif translation_engine == "google":
             translation = gtranslate.translate(
                 inp,
-                to_language=supported_languages[to_lang],
-                from_language=to_short_name(from_lang, supported_languages),
+                to_language=to_lang_code(to_lang, supported_languages),
+                from_language=to_lang_code(from_lang, supported_languages),
             )
+
+    use_text_fields = request.args.get("typingiscool") == "True"
 
     return await render_template(
         "index.html",
@@ -69,7 +80,8 @@ async def index():
         from_l=from_lang,
         to_l=to_lang,
         engine=translation_engine,
-        supported_languages=supported_languages
+        supported_languages=supported_languages,
+        use_text_fields=use_text_fields
     )
 
 if __name__ == "__main__":

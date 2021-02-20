@@ -20,26 +20,41 @@
     <body>
         <h1>Simple Web Translator</h1>
 
-        <form action="/?engine={{ engine }}" method="POST">
+        <form action="/?engine={{ engine }}&typingiscool={{ use_text_fields }}" method="POST">
             Translation Engine:
 
-            <button type="submit" formaction="/?engine=google&switchengine=true" formmethod="POST">Google</button>
-            <button type="submit" formaction="/?engine=libre&switchengine=true" formmethod="POST">LibreTranslate</button>
+            <button type="submit" formaction="/?engine=google&switchengine=true&typingiscool={{ use_text_fields }}" formmethod="POST">Google</button>
+            <button type="submit" formaction="/?engine=libre&switchengine=true&typingiscool={{ use_text_fields }}" formmethod="POST">LibreTranslate</button>
 
             <br>
             <br>
 
             <div id="fields_container">
                 <div id="language_fields_container">
-                    <select name="from_language" id="from_language">
-                        {{ lang_option('Autodetect', from_l) }}
-                        {{ supported_lang_options(from_l) }}
-                    </select>
+                    {% if use_text_fields %}
 
-                    <select name="to_language" id="to_language">
-                        {{ supported_lang_options(to_l) }}
-                    </select>
+                        <input type="text" id="from_language" name="from_language" value="{{ from_l }}" placeholder="from" />
+                        <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
+
+                    {% else %}
+                        <select name="from_language" id="from_language">
+                            {{ lang_option('Autodetect', from_l) }}
+                            {{ supported_lang_options(from_l) }}
+                        </select>
+
+                        <select name="to_language" id="to_language">
+                            {{ supported_lang_options(to_l) }}
+                        </select>
+                    {% endif %}
                 </div>
+
+                <a href="/?typingiscool={{ not use_text_fields }}">
+                    {% if use_text_fields %}
+                        Use dropdowns
+                    {% else %}
+                        Use text fields
+                    {% endif %}
+                </a>
 
                 <br>
 
