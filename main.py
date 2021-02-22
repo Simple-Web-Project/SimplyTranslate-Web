@@ -5,6 +5,15 @@ import simplytranslate_engines.libretranslate as libre
 
 app = Quart(__name__)
 
+def to_full_name(lang_code, supported_languages):
+    lang_code = lang_code.lower()
+
+    for key, value in supported_languages.items():
+        if value == lang_code:
+            return key
+
+    return None
+
 def to_lang_code(lang, supported_languages):
     lang = lang.lower()
 
@@ -73,8 +82,8 @@ async def index():
     else:
         # support google format
         inp = request.args.get("text", "")
-        from_l = request.args.get("sl", "auto")
-        to_l = request.args.get("tl", "en")
+        from_lang = to_full_name(request.args.get("sl", "auto"), supported_languages)
+        to_lang = to_full_name(request.args.get("tl", "en"), supported_languages)
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
