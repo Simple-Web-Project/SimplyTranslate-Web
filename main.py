@@ -70,6 +70,11 @@ async def index():
                 to_language=to_lang_code(to_lang, supported_languages),
                 from_language=to_lang_code(from_lang, supported_languages),
             )
+    else:
+        # support google format
+        inp = request.args.get("text", "")
+        from_l = request.args.get("sl", "auto")
+        to_l = request.args.get("tl", "en")
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
