@@ -33,3 +33,6 @@ uvicorn main:app --port 5000
 ### Other projects like this
 [gtranslate](https://git.sr.ht/~yerinalexey/gtranslate)
 
+### Contact
+To get in contact with the developers, visit us on the #simple-web [IRC channel](https://webchat.freenode.net/#simple-web) on freenode
+
