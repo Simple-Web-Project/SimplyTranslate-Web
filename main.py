@@ -8,6 +8,9 @@ app = Quart(__name__)
 def to_full_name(lang_code, supported_languages):
     lang_code = lang_code.lower()
 
+    if lang_code == "auto":
+        return "Autodetect"
+
     for key, value in supported_languages.items():
         if value == lang_code:
             return key
@@ -66,7 +69,13 @@ async def index():
 
     translation = None
 
-    if request.method == "POST" and not switch_engine:
+    if request.method == "GET":
+        # support google format
+        inp = request.args.get("text", "")
+        from_lang = to_full_name(request.args.get("sl", "auto"), supported_languages)
+        to_lang = to_full_name(request.args.get("tl", "en"), supported_languages)
+
+    if not (inp == "" or inp.isspace()):
         if translation_engine == "libre":
             translation = libre.translate(
                 inp,
@@ -79,11 +88,6 @@ async def index():
                 to_language=to_lang_code(to_lang, supported_languages),
                 from_language=to_lang_code(from_lang, supported_languages),
             )
-    else:
-        # support google format
-        inp = request.args.get("text", "")
-        from_lang = to_full_name(request.args.get("sl", "auto"), supported_languages)
-        to_lang = to_full_name(request.args.get("tl", "en"), supported_languages)
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
