@@ -57,15 +57,9 @@ async def index():
 
     inp = (await request.form).get("input", "")
 
-    from_lang = (await request.form).get("from_language", None)
+    from_lang = (await request.form).get("from_language", "Autodetect")
 
-    if from_lang == None:
-        from_lang = "Autodetect"
-
-    to_lang = (await request.form).get("to_language", None)
-
-    if to_lang == None:
-        to_lang = "English"
+    to_lang = (await request.form).get("to_language", "English")
 
     translation = None
 
