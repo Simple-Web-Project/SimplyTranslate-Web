@@ -54,20 +54,23 @@ async def index():
         supported_languages = gtranslate.supported_languages
 
     switch_engine = request.args.get("switchengine", False)
-
-    inp = (await request.form).get("input", "")
-
-    from_lang = (await request.form).get("from_language", "Autodetect")
-
-    to_lang = (await request.form).get("to_language", "English")
-
     translation = None
 
     if request.method == "GET":
         # support google format
         inp = request.args.get("text", "")
+
         from_lang = to_full_name(request.args.get("sl", "auto"), supported_languages)
+
         to_lang = to_full_name(request.args.get("tl", "en"), supported_languages)
+    elif request.method == "POST":
+        form = await request.form
+
+        inp = form.get("input", "")
+
+        from_lang = form.get("from_language", "Autodetect")
+
+        to_lang = form.get("to_language", "English")
 
     if not (inp == "" or inp.isspace()):
         if translation_engine == "libre":
