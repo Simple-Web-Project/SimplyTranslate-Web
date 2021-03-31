@@ -55,7 +55,6 @@ async def index():
 
     engine = next((engine for engine in engines if engine.name == engine_name), google_translate_engine)
 
-    switch_engine = request.args.get("switchengine", False)
     translation = None
 
     if request.method == "GET":
