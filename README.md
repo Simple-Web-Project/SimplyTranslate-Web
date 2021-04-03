@@ -5,7 +5,8 @@ This is a simple web interface for SimplyTranslate
 ## How to install/use
 ### Clone simplytranslate_engines repository and install it
 ```sh
-git clone https://git.sr.ht/~metalune/simplytranslate_engines cd simplytranslate_engines
+git clone https://git.sr.ht/~metalune/simplytranslate_engines
+cd simplytranslate_engines
 sudo python3 setup.py install
 cd ..
 ```
