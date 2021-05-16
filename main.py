@@ -73,11 +73,16 @@ async def index():
 
         to_lang = form.get("to_language", "English")
 
+    from_l_code = None
+    to_l_code = None
+
     if not (inp == "" or inp.isspace()):
+        from_l_code = to_lang_code(from_lang, engine)
+        to_l_code = to_lang_code(to_lang, engine)
         translation = engine.translate(
             inp,
-            to_language=to_lang_code(to_lang, engine),
-            from_language=to_lang_code(from_lang, engine),
+            to_language=to_l_code,
+            from_language=from_l_code,
         )
 
     use_text_fields = request.args.get("typingiscool") == "True"
@@ -87,7 +92,9 @@ async def index():
         inp=inp,
         translation=translation,
         from_l=from_lang,
+        from_l_code=from_l_code,
         to_l=to_lang,
+        to_l_code=to_l_code,
         engine=engine.name,
         supported_languages=engine.get_supported_languages(),
         use_text_fields=use_text_fields

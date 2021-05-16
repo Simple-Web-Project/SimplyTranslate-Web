@@ -77,6 +77,8 @@
             text left-aligned.
             #}
             <div><pre id="translated_text_container">{{ translation }}</pre></div>
+            <br>
+            <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Link to share with others</a>
         {% endif %}
 
         <br>
