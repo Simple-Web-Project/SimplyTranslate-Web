@@ -1,3 +1,15 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #10100E;
+        color: #C6C6C4;
+    }
+
+    #input, #from_language, #to_language, button {
+        background-color: #222222;
+        color: #bbbbbb;
+    }
+}
+
 body {
     text-align: center;
 }
