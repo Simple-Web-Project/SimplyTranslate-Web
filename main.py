@@ -100,5 +100,10 @@ async def index():
         use_text_fields=use_text_fields
     )
 
+@app.route("/info", methods=["GET"])
+async def info():
+    return await render_template("info.html")
+
+
 if __name__ == "__main__":
     app.run()
