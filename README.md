@@ -5,7 +5,7 @@ This is a simple web interface for SimplyTranslate
 ## List of Instances
 * https://translate.metalune.xyz
 
-If you want to add your own instance here, please either send me an email directly to metalune@mailbox.org or tell us about it in our IRC channel #simple-web on freenode 
+If you want to add your own instance here, please either send me an email directly to metalune@mailbox.org or tell us about it in our IRC channel #simple-web on [Libera.Chat](https://libera.chat)
 
 ## How to install/use
 ### Clone simplytranslate_engines repository and install it
