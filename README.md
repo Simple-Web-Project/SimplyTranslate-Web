@@ -40,4 +40,4 @@ uvicorn main:app --port 5000
 [lingva translate](https://github.com/TheDavidDelta/lingva-translate)
 
 ### Contact
-To get in contact with the developers, visit us on the #simple-web [IRC channel](https://webchat.freenode.net/#simple-web) on freenode
+To get in contact with the developers, visit us on the #simple-web IRC channel on [Libera.Chat](https://libera.chat)
