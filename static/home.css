@@ -4,10 +4,26 @@
         color: #C6C6C4;
     }
 
+    a {
+        color: darkcyan;
+    }
+
+    a:visited {
+        color: cyan;
+    }
+
     #input, #from_language, #to_language, button {
         background-color: #222222;
         color: #bbbbbb;
     }
+
+    button {
+        border: 1px solid #aaaaaa;
+    }
+}
+
+* {
+    font-family: sans;
 }
 
 body {
@@ -17,6 +33,10 @@ body {
 #from_language, #to_language {
     width: 48%;
     box-sizing: border-box;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 2px 5px
+    margin-bottom: 5px;
 }
 
 #language_fields_container {
@@ -27,6 +47,10 @@ body {
 #input {
     width: 100%;
     box-sizing: border-box;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin-top: 15px;
 }
 
 #fields_container {
@@ -51,3 +75,14 @@ body {
     white-space: pre-wrap;
     word-break: break-word;
 }
+
+button {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 5px 20px;
+}
+
+button:hover {
+    border: 1px solid #aaaaaa;
+}
+
