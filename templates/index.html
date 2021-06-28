@@ -34,16 +34,19 @@
             <div id="fields_container">
                 <div id="language_fields_container">
                     {% if use_text_fields %}
-
                         <input type="text" id="from_language" name="from_language" value="{{ from_l }}" placeholder="from" />
-                        <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
-
                     {% else %}
                         <select name="from_language" id="from_language">
                             {{ lang_option('Autodetect', from_l) }}
                             {{ supported_lang_options(from_l) }}
                         </select>
+                    {% endif %}
 
+                    <button id="switchbutton" title="Switch input and output languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
+                        
+                    {% if use_text_fields %}
+                        <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
+                    {% else %}
                         <select name="to_language" id="to_language">
                             {{ supported_lang_options(to_l) }}
                         </select>
@@ -57,6 +60,7 @@
                         Use text fields
                     {% endif %}
                 </a>
+
 
                 <br>
 

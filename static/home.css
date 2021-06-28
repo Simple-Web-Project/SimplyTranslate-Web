@@ -31,12 +31,12 @@ body {
 }
 
 #from_language, #to_language {
-    width: 48%;
+    width: 42%;
     box-sizing: border-box;
     border: 1px solid #dddddd;
     border-radius: 5px;
-    padding: 2px 5px
-    margin-bottom: 5px;
+    padding: 2px 5px;
+    /*margin-bottom: 5px;*/
 }
 
 #language_fields_container {
@@ -80,6 +80,11 @@ button {
     border: 1px solid #dddddd;
     border-radius: 5px;
     padding: 5px 20px;
+}
+
+#switchbutton {
+    padding: 5px 5px;
+    margin: 0px 5px;
 }
 
 button:hover {

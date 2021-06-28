@@ -1,4 +1,4 @@
-from quart import Quart, render_template, request
+from quart import Quart, render_template, request, redirect
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
@@ -8,6 +8,7 @@ google_translate_engine = GoogleTranslateEngine()
 engines = [google_translate_engine, LibreTranslateEngine()]
 
 app = Quart(__name__)
+
 
 def to_full_name(lang_code, engine):
     lang_code = lang_code.lower()
@@ -22,6 +23,7 @@ def to_full_name(lang_code, engine):
             return key
 
     return None
+
 
 def to_lang_code(lang, engine):
     lang = lang.lower()
@@ -41,6 +43,7 @@ def to_lang_code(lang, engine):
 
     return None
 
+
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
 )
@@ -49,11 +52,59 @@ async def translate(from_language, to_language, input_text):
         input_text, from_language=from_language, to_language=to_language
     )
 
+
+@app.route("/switchlanguages/", methods=["POST"])
+async def switchlanguages():
+    form = await request.form
+
+    engine_name = request.args.get("engine")
+    print(engine_name)
+
+    engine = next(
+        (engine for engine in engines if engine.name == engine_name),
+        google_translate_engine,
+    )
+
+    print(engine.name)
+
+    text = form.get("input", "")
+    from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
+    to_lang = to_lang_code(form.get("to_language", "English"), engine)
+
+    # if the from_lang is not auto,
+    if from_lang != "auto":
+        tmp_from_lang = from_lang
+        from_lang = to_lang
+        to_lang = tmp_from_lang
+
+    use_text_fields = request.args.get("typingiscool") == "True"
+
+    """
+    In case we ever want to also switch the translated text with the to-be-translated text, this is a good start.
+
+    translation = engine.translate(
+        text,
+        to_language=to_lang,
+        from_language=from_lang,
+    )
+    """
+
+    return redirect(
+        "/?engine={0}&typingiscool={1}&sl={2}&tl={3}&text={4}".format(
+            engine_name, use_text_fields, from_lang, to_lang, text
+        ),
+        code=302,
+    )
+
+
 @app.route("/", methods=["GET", "POST"])
 async def index():
     engine_name = request.args.get("engine")
 
-    engine = next((engine for engine in engines if engine.name == engine_name), google_translate_engine)
+    engine = next(
+        (engine for engine in engines if engine.name == engine_name),
+        google_translate_engine,
+    )
 
     translation = None
 
@@ -97,8 +148,9 @@ async def index():
         to_l_code=to_l_code,
         engine=engine.name,
         supported_languages=engine.get_supported_languages(),
-        use_text_fields=use_text_fields
+        use_text_fields=use_text_fields,
     )
+
 
 @app.route("/about", methods=["GET"])
 async def about():
