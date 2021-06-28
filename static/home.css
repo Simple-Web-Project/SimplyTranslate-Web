@@ -36,7 +36,6 @@ body {
     border: 1px solid #dddddd;
     border-radius: 5px;
     padding: 2px 5px;
-    /*margin-bottom: 5px;*/
 }
 
 #language_fields_container {
@@ -85,6 +84,11 @@ button {
 #switchbutton {
     padding: 5px 5px;
     margin: 0px 5px;
+}
+
+#typingiscoolbutton {
+    margin-top: 5px;
+    padding: 5px 5px;
 }
 
 button:hover {

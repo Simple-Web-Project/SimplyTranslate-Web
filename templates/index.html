@@ -53,13 +53,13 @@
                     {% endif %}
                 </div>
 
-                <a href="/?engine={{ engine }}&typingiscool={{ not use_text_fields }}">
+                <button id="typingiscoolbutton" formaction="/typingiscool/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit">
                     {% if use_text_fields %}
                         Use dropdowns
                     {% else %}
                         Use text fields
                     {% endif %}
-                </a>
+                </button>
 
 
                 <br>

@@ -58,14 +58,12 @@ async def switchlanguages():
     form = await request.form
 
     engine_name = request.args.get("engine")
-    print(engine_name)
 
     engine = next(
         (engine for engine in engines if engine.name == engine_name),
         google_translate_engine,
     )
 
-    print(engine.name)
 
     text = form.get("input", "")
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
@@ -96,6 +94,31 @@ async def switchlanguages():
         code=302,
     )
 
+@app.route("/typingiscool/", methods=["POST"])
+async def typingiscool():
+    form = await request.form
+
+    engine_name = request.args.get("engine")
+
+    engine = next(
+        (engine for engine in engines if engine.name == engine_name),
+        google_translate_engine,
+    )
+
+
+    text = form.get("input", "")
+    from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
+    to_lang = to_lang_code(form.get("to_language", "English"), engine)
+
+    use_text_fields = request.args.get("typingiscool") == "True"
+    use_text_fields = not use_text_fields
+
+    return redirect(
+        "/?engine={0}&typingiscool={1}&sl={2}&tl={3}&text={4}".format(
+            engine_name, use_text_fields, from_lang, to_lang, text
+        ),
+        code=302,
+    )
 
 @app.route("/", methods=["GET", "POST"])
 async def index():
