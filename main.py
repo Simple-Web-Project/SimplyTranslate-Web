@@ -2,47 +2,13 @@ from quart import Quart, render_template, request, redirect
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
+from simplytranslate_engines.utils import *
 
 google_translate_engine = GoogleTranslateEngine()
 
 engines = [google_translate_engine, LibreTranslateEngine()]
 
 app = Quart(__name__)
-
-
-def to_full_name(lang_code, engine):
-    lang_code = lang_code.lower()
-
-    if lang_code == "auto":
-        return "Autodetect"
-
-    supported_languages = engine.get_supported_languages()
-
-    for key, value in supported_languages.items():
-        if value == lang_code:
-            return key
-
-    return None
-
-
-def to_lang_code(lang, engine):
-    lang = lang.lower()
-
-    if lang == "autodetect" or lang == "auto":
-        return "auto"
-
-    supported_languages = engine.get_supported_languages()
-
-    for key in supported_languages.keys():
-        if key.lower() == lang:
-            return supported_languages[key]
-
-    for value in supported_languages.values():
-        if value.lower() == lang:
-            return value
-
-    return None
-
 
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
@@ -59,11 +25,7 @@ async def switchlanguages():
 
     engine_name = request.args.get("engine")
 
-    engine = next(
-        (engine for engine in engines if engine.name == engine_name),
-        google_translate_engine,
-    )
-
+    engine = get_engine(engine_name, engines, google_translate_engine)
 
     text = form.get("input", "")
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
@@ -100,11 +62,7 @@ async def typingiscool():
 
     engine_name = request.args.get("engine")
 
-    engine = next(
-        (engine for engine in engines if engine.name == engine_name),
-        google_translate_engine,
-    )
-
+    engine = get_engine(engine_name, engines, google_translate_engine)
 
     text = form.get("input", "")
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
@@ -124,10 +82,7 @@ async def typingiscool():
 async def index():
     engine_name = request.args.get("engine")
 
-    engine = next(
-        (engine for engine in engines if engine.name == engine_name),
-        google_translate_engine,
-    )
+    engine = get_engine(engine_name, engines, google_translate_engine)
 
     translation = None
 
