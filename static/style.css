@@ -1,97 +1,87 @@
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #10100E;
-        color: #C6C6C4;
-    }
-
-    a {
-        color: darkcyan;
-    }
-
-    a:visited {
-        color: cyan;
-    }
-
-    #input, #from_language, #to_language, button {
-        background-color: #222222;
-        color: #bbbbbb;
-    }
-
-    button {
-        border: 1px solid #aaaaaa;
-    }
-}
-
-* {
-    font-family: sans;
-}
-
-body {
-    text-align: center;
-}
-
-#from_language, #to_language {
-    width: 42%;
-    box-sizing: border-box;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    padding: 2px 5px;
-}
-
-#language_fields_container {
+#wrap {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-#input {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    padding: 2px 5px;
-    margin-top: 15px;
+.item {
+    width: 450px;
+    height: 150px;
+    margin: 5px 10px;
 }
 
-#fields_container {
-    width: 20rem;
-    margin: auto;
+
+.translation {
+    resize: none;
 }
 
-#translated_text_container {
-    /* Don't use the monospace default. */
-    font-family: inherit;
-
-    /* Remove the default top and bottom margins. */
-    margin: 0;
-
-    /* Make it not take the whole width. */
-    display: inline-block;
-
-    /* Align the translated text to the start. */
-    text-align: start;
-
-    /* Fix overflow (e.g. on mobile) */
-    white-space: pre-wrap;
-    word-break: break-word;
+.language {
+    height: 50px;
+    margin: 0px 10px;
 }
 
-button {
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    padding: 5px 20px;
-}
-
-#switchbutton {
-    padding: 5px 5px;
+.switch_languages {
+    height: 50px;
     margin: 0px 5px;
 }
 
-#typingiscoolbutton {
-    margin-top: 5px;
-    padding: 5px 5px;
+button {
+    padding: 4px 10px;
+    border: 2px solid #888888;
 }
 
-button:hover {
-    border: 1px solid #aaaaaa;
+input,
+select,
+textarea {
+    font-size: 1rem;
+    padding: 4px;
+    border: 2px solid #888888;
 }
 
+textarea {
+    box-sizing; border-box;
+    resize vertical;
+    height: 5rem;
+
+    /* Stretch to form width */
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: 2px solid #5d94ff;
+}
+
+
+body {
+    justify-content: center;
+}
+
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+        color: #f8f9fa;
+    }
+
+    a:visited {
+        color: #9759f6;
+        text-decoration: none;
+    }
+
+    a {
+        color: #599bf6;
+        text-decoration: none;
+    }
+
+    input,
+    select,
+    button,
+    textarea {
+        background-color: #131618;
+        border-color: #495057;
+        color: #f8f9fa;
+    }
+}

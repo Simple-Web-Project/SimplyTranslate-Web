@@ -9,6 +9,8 @@
         {{ lang_option(lang_name, current_lang) }}
     {% endfor %}
 {% endmacro %}
+
+
 <html>
     <head>
         <title>SimplyTranslate</title>
@@ -19,77 +21,69 @@
     </head>
 
     <body>
-        <h1>SimplyTranslate</h1>
 
-        <form action="/?engine={{ engine }}&typingiscool={{ use_text_fields }}" method="POST">
-            Translation Engine:
+        <center>
+            <h2>SimplyTranslate</h2>
+        </center>
 
-            <a href="/?engine=google&typingiscool={{ use_text_fields }}">Google</a>
-            |
-            <a href="/?engine=libre&typingiscool={{ use_text_fields }}">LibreTranslate</a>
+        <form action="/?engine={{ engine }}" method="POST">
 
-            <br>
-            <br>
-
-            <div id="fields_container">
-                <div id="language_fields_container">
-                    {% if use_text_fields %}
-                        <input type="text" id="from_language" name="from_language" value="{{ from_l }}" placeholder="from" />
-                    {% else %}
-                        <select name="from_language" id="from_language">
-                            {{ lang_option('Autodetect', from_l) }}
-                            {{ supported_lang_options(from_l) }}
-                        </select>
-                    {% endif %}
-
-                    <button id="switchbutton" title="Switch input and output languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
-                        
-                    {% if use_text_fields %}
-                        <input type="text" id="to_language" name="to_language" value="{{ to_l }}" placeholder="to" />
-                    {% else %}
-                        <select name="to_language" id="to_language">
-                            {{ supported_lang_options(to_l) }}
-                        </select>
-                    {% endif %}
+            <!-- engine buttons -->
+            <center>
+                <p>Translation Engine <a href="/?engine=google&typingiscool={{ use_text_fields }}">Google</a> | <a href="/?engine=libre&typingiscool={{ use_text_fields }}">Libre</a></p>
+            </center>
+            
+            <!-- from and to language -->
+            <div id="wrap">
+                <div class="language">
+                    <select name="from_language" id="from_language">
+                        {{ lang_option('Autodetect', from_l) }}
+                        {{ supported_lang_options(from_l) }}
+                    </select>
                 </div>
 
-                <button id="typingiscoolbutton" formaction="/typingiscool/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit">
-                    {% if use_text_fields %}
-                        Use dropdowns
-                    {% else %}
-                        Use text fields
-                    {% endif %}
-                </button>
+                <div class="switch_languages">
+                    <button id="switchbutton" title="Switch input and output languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
+                </div>
 
-
-                <br>
-
-                <textarea autofocus id="input" name="input" rows="5" placeholder="text you want to translate">{{ inp }}</textarea>
+                <div class="language">
+                    <select name="to_language" id="to_language">
+                        {{ supported_lang_options(to_l) }}
+                    </select>
+                </div>
             </div>
 
-            <br>
+            <!-- text boxes -->
+            <div id="wrap">
+                <textarea autofocus class="item" id="input" name="input"  placeholder="Enter Text Here">{{ inp }}</textarea>
+                {% if translation == None %}
+                    <textarea class="translation item" placeholder="Translation" readonly></textarea>
+                {% else %}
+                    <textarea class="translation item" placeholder="Translation" readonly>{{ translation }}</textarea>
+                {% endif %}
 
-	    <button type="submit">Translate with {{ engine }}!</button>
+            </div>
+
+
+            <center>
+                <!-- translate button -->
+                <button type="submit">Translate with {{ engine }}!</button>
+
+                <br>
+                <!-- link to share translation -->
+                <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
+            </center>
+
         </form>
-
-        <br>
-
-        {% if translation %}
-            <b>Translation ({{ engine }}):</b>
-            {# This is wrapped in a `div` so that we can center it while keeping the
-            text left-aligned.
-            #}
-            <div><pre id="translated_text_container">{{ translation }}</pre></div>
-            <br>
-            <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
-        {% endif %}
 
         <br>
         <br>
         <br>
         
         <footer>
-            <a href="/about">About</a>
+            <center>
+                <a href="/about">About</a>
+            </center>
         </footer>
     </body>
 </html>
