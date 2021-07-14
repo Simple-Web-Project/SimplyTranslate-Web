@@ -14,10 +14,99 @@
 <html>
     <head>
         <title>SimplyTranslate</title>
-        <link rel="stylesheet" href="/static/style.css">
         <meta name="description" content="Experience simple and private Google translations">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
+
+        <style>
+        #wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .item {
+            width: 450px;
+            height: 150px;
+            margin: 5px 10px;
+        }
+
+
+        .translation {
+            resize: none;
+        }
+
+        .language {
+            height: 50px;
+            margin: 0px 10px;
+        }
+
+        .switch_languages {
+            height: 50px;
+            margin: 0px 5px;
+        }
+
+        button {
+            padding: 4px 10px;
+            border: 2px solid #888888;
+        }
+
+        input,
+        select,
+        textarea {
+            font-size: 1rem;
+            padding: 4px;
+            border: 2px solid #888888;
+        }
+
+        textarea {
+            box-sizing; border-box;
+            resize vertical;
+            height: 5rem;
+
+            /* Stretch to form width */
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            outline: 2px solid #5d94ff;
+        }
+
+
+        body {
+            justify-content: center;
+        }
+
+
+        @media screen and (prefers-color-scheme: dark) {
+            body {
+                background-color: #212529;
+                color: #f8f9fa;
+            }
+
+            a:visited {
+                color: #9759f6;
+                text-decoration: none;
+            }
+
+            a {
+                color: #599bf6;
+                text-decoration: none;
+            }
+
+            input,
+            select,
+            button,
+            textarea {
+                background-color: #131618;
+                border-color: #495057;
+                color: #f8f9fa;
+            }
+        }
+        </style>
     </head>
 
     <body>
