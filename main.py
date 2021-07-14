@@ -1,24 +1,12 @@
 from quart import Quart, render_template, request, redirect
-from configparser import ConfigParser
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
 from simplytranslate_engines.utils import *
 
-config = ConfigParser()
-
-config.read(["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"])
-
 google_translate_engine = GoogleTranslateEngine()
 
-engines = [
-    google_translate_engine,
-    LibreTranslateEngine(
-        config['libretranslate']['Instance'],
-        # `ApiKey` is not required, so use `get` to get `None` as fallback.
-        config['libretranslate'].get('ApiKey'),
-    )
-]
+engines = [google_translate_engine, LibreTranslateEngine()]
 
 app = Quart(__name__)
 

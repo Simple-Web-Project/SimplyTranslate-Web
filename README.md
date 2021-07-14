@@ -35,10 +35,6 @@ python3 main.py
 uvicorn main:app --port 5000
 ```
 
-### Configuration
-
-See [config.conf](config.conf).
-
 ### Other projects like this
 [gtranslate](https://git.sr.ht/~yerinalexey/gtranslate)
 [lingva translate](https://github.com/TheDavidDelta/lingva-translate)
