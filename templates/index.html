@@ -121,6 +121,7 @@
 
             <!-- engine buttons -->
             <center>
+                {% if engines != None %}
                 <p>
                     Translation Engine
                     {% for engine in engines %}
@@ -145,6 +146,7 @@
                         {% endif %}
                     {% endfor %}
                 </p>
+                {% endif %}
             </center>
 
             <!-- from and to language -->
