@@ -1,12 +1,35 @@
 from quart import Quart, render_template, request, redirect
+from configparser import ConfigParser
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
 from simplytranslate_engines.utils import *
 
-google_translate_engine = GoogleTranslateEngine()
+config = ConfigParser()
 
-engines = [google_translate_engine, LibreTranslateEngine()]
+config.read(['/etc/simplytranslate/shared.conf', '/etc/simplytranslate/web.conf'])
+
+engines = []
+
+if config.getboolean('google', 'Enabled', fallback=True):
+    engines.append(GoogleTranslateEngine())
+
+libretranslate_enabled = config.getboolean('libretranslate', 'Enabled', fallback=None)
+
+if libretranslate_enabled is None:
+    print("LibreTranslate is disabled by default; please edit the config file to explicitly state whether it is enabled or not")
+
+if libretranslate_enabled:
+    engines.append(
+        LibreTranslateEngine(
+            config['libretranslate']['Instance'],
+            # `ApiKey` is not required, so use `get` to get `None` as fallback.
+            config['libretranslate'].get('ApiKey'),
+        )
+    )
+
+if not engines:
+    raise Exception('All translation engines are disabled')
 
 app = Quart(__name__)
 
@@ -14,7 +37,7 @@ app = Quart(__name__)
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
 )
 async def translate(from_language, to_language, input_text):
-    return google_translate_engine.translate(
+    return engines[0].translate(
         input_text, from_language=from_language, to_language=to_language
     )
 
@@ -25,7 +48,7 @@ async def switchlanguages():
 
     engine_name = request.args.get("engine")
 
-    engine = get_engine(engine_name, engines, google_translate_engine)
+    engine = get_engine(engine_name, engines, engines[0])
 
     text = form.get("input", "")
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
@@ -62,7 +85,7 @@ async def typingiscool():
 
     engine_name = request.args.get("engine")
 
-    engine = get_engine(engine_name, engines, google_translate_engine)
+    engine = get_engine(engine_name, engines, engines[0])
 
     text = form.get("input", "")
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
@@ -82,7 +105,7 @@ async def typingiscool():
 async def index():
     engine_name = request.args.get("engine")
 
-    engine = get_engine(engine_name, engines, google_translate_engine)
+    engine = get_engine(engine_name, engines, engines[0])
 
     translation = None
 
@@ -125,6 +148,7 @@ async def index():
         to_l=to_lang,
         to_l_code=to_l_code,
         engine=engine.name,
+        engines=[engine.name for engine in engines],
         supported_languages=engine.get_supported_languages(),
         use_text_fields=use_text_fields,
     )

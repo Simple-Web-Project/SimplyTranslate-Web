@@ -121,9 +121,32 @@
 
             <!-- engine buttons -->
             <center>
-                <p>Translation Engine <a href="/?engine=google&typingiscool={{ use_text_fields }}">Google</a> | <a href="/?engine=libre&typingiscool={{ use_text_fields }}">Libre</a></p>
+                <p>
+                    Translation Engine
+                    {% for engine in engines %}
+                        <a href="/?engine={{ engine }}&typingiscool={{ use_text_fields }}">
+                            {# These hyphens remove whitespace before/after the block.
+                               They're here to remove the trailing space in the Google
+                               engine link, which gets on yours truly's nerves.
+                               I tried to put them just at the end only (i.e. `-%}`),
+                               but it didn't work for whatever reason.
+                            #}
+
+                            {%- if engine == "google" -%}
+                                Google
+                            {%- elif engine == "libre" -%}
+                                LibreTranslate
+                            {%- else -%}
+                                {{ engine }}
+                            {%- endif -%}
+                        </a>
+                        {% if not loop.last %}
+                            |
+                        {% endif %}
+                    {% endfor %}
+                </p>
             </center>
-            
+
             <!-- from and to language -->
             <div id="wrap">
                 <div class="language">
