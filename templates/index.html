@@ -120,9 +120,8 @@
         <form action="/?engine={{ engine }}" method="POST">
 
             <!-- engine buttons -->
-            <center>
-                {% if engines|length > 1 %}
-                <p>
+            {% if engines|length > 1 %}
+                <center>
                     Translation Engine
                     {% for _engine in engines %}
                         <a style="
@@ -151,9 +150,9 @@
                             |
                         {% endif %}
                     {% endfor %}
-                </p>
-                {% endif %}
-            </center>
+                </center>
+                <br>
+            {% endif %}
 
             <!-- from and to language -->
             <div id="wrap">
@@ -178,19 +177,18 @@
             <!-- text boxes -->
             <div id="wrap">
                 <textarea autofocus class="item" id="input" name="input"  placeholder="Enter Text Here">{{ inp }}</textarea>
-                {% if translation == None %}
-                    <textarea class="translation item" placeholder="Translation" readonly></textarea>
-                {% else %}
-                    <textarea class="translation item" placeholder="Translation" readonly>{{ translation }}</textarea>
-                {% endif %}
-
+                <textarea class="translation item" placeholder="Translation" readonly>
+                    {%- if translation != None -%}{{ translation }}{%- endif -%}
+                </textarea>
             </div>
 
+            <br>
 
             <center>
                 <!-- translate button -->
                 <button type="submit">Translate with {{ engine }}!</button>
 
+                <br>
                 <br>
                 <!-- link to share translation -->
                 <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
@@ -201,7 +199,7 @@
         <br>
         <br>
         <br>
-        
+
         <footer>
             <center>
                 <a href="/about">About</a>
