@@ -121,7 +121,7 @@
 
             <!-- engine buttons -->
             <center>
-                {% if engines != None %}
+                {% if engines|length > 1 %}
                 <p>
                     Translation Engine
                     {% for _engine in engines %}

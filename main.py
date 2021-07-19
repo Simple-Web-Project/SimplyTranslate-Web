@@ -139,13 +139,6 @@ async def index():
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
-
-    ui_engines = [engine.name for engine in engines]
-
-    # if there is only one engine, set the ui_engines list to None, then the UI will ignore the entire engines select field
-    if len(ui_engines) == 1:
-        ui_engines = None
-
     return await render_template(
         "index.html",
         inp=inp,
@@ -155,7 +148,7 @@ async def index():
         to_l=to_lang,
         to_l_code=to_l_code,
         engine=engine.name,
-        engines=ui_engines,
+        engines=[engine.name for engine in engines],
         supported_languages=engine.get_supported_languages(),
         use_text_fields=use_text_fields,
     )
