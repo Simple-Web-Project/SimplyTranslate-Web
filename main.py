@@ -107,7 +107,7 @@ async def index():
 
     engine = get_engine(engine_name, engines, engines[0])
 
-    translation = None
+    from_lang, to_lang, inp, translation = "", "", "", None
 
     if request.method == "GET":
         # support google format
