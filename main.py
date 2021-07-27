@@ -1,5 +1,6 @@
 from quart import Quart, render_template, request, redirect
 from configparser import ConfigParser
+from urllib.parse import urlencode
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
@@ -72,10 +73,16 @@ async def switchlanguages():
     )
     """
 
+    redirect_params = {
+        'engine': engine_name,
+        'typingiscool': use_text_fields,
+        'sl': from_lang,
+        'tl': to_lang,
+        'text': text
+    }
+
     return redirect(
-        "/?engine={0}&typingiscool={1}&sl={2}&tl={3}&text={4}".format(
-            engine_name, use_text_fields, from_lang, to_lang, text
-        ),
+        f"/?{urlencode(redirect_params)}",
         code=302,
     )
 
@@ -94,10 +101,16 @@ async def typingiscool():
     use_text_fields = request.args.get("typingiscool") == "True"
     use_text_fields = not use_text_fields
 
+    redirect_params = {
+        'engine': engine_name,
+        'typingiscool': use_text_fields,
+        'sl': from_lang,
+        'tl': to_lang,
+        'text': text
+    }
+
     return redirect(
-        "/?engine={0}&typingiscool={1}&sl={2}&tl={3}&text={4}".format(
-            engine_name, use_text_fields, from_lang, to_lang, text
-        ),
+        f"/?{urlencode(redirect_params)}",
         code=302,
     )
 
