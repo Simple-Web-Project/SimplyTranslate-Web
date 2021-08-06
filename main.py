@@ -1,4 +1,5 @@
-from quart import Quart, render_template, request, redirect
+from os import urandom
+from quart import Quart, render_template, request, redirect, session
 from configparser import ConfigParser
 from urllib.parse import urlencode
 
@@ -33,6 +34,8 @@ if not engines:
     raise Exception('All translation engines are disabled')
 
 app = Quart(__name__)
+
+app.secret_key = urandom(30)
 
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
@@ -129,6 +132,12 @@ async def index():
         from_lang = to_full_name(request.args.get("sl", "auto"), engine)
 
         to_lang = to_full_name(request.args.get("tl", "en"), engine)
+
+        if session.get('from_language'):
+            from_lang = session['from_language']
+        if session.get('to_language'):
+            to_lang = session['to_language']
+
     elif request.method == "POST":
         form = await request.form
 
@@ -137,6 +146,9 @@ async def index():
         from_lang = form.get("from_language", "Autodetect")
 
         to_lang = form.get("to_language", "English")
+
+        session['from_language'] = from_lang
+        session['to_language'] = to_lang
 
     from_l_code = None
     to_l_code = None
