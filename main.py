@@ -64,6 +64,11 @@ async def switchlanguages():
         from_lang = to_lang
         to_lang = tmp_from_lang
 
+    if session.get("from_lang") and sesssion.get('to_lang'):
+        tmp_session_from_lang = session['from_lang']
+        session['from_lang'] = session['to_lang']
+        session['to_lang'] = tmp_session_from_lang
+
     use_text_fields = request.args.get("typingiscool") == "True"
 
     """
@@ -133,10 +138,10 @@ async def index():
 
         to_lang = to_full_name(request.args.get("tl", "en"), engine)
 
-        if session.get('from_language'):
-            from_lang = session['from_language']
-        if session.get('to_language'):
-            to_lang = session['to_language']
+        if session.get('from_lang'):
+            from_lang = to_full_name(session['from_lang'], engine)
+        if session.get('to_lang'):
+            to_lang = to_full_name(session['to_lang'], engine)
 
     elif request.method == "POST":
         form = await request.form
@@ -147,8 +152,8 @@ async def index():
 
         to_lang = form.get("to_language", "English")
 
-        session['from_language'] = from_lang
-        session['to_language'] = to_lang
+        session['from_lang'] = to_lang_code(from_lang, engine)
+        session['to_lang'] = to_lang_code(to_lang, engine)
 
     from_l_code = None
     to_l_code = None
