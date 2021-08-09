@@ -64,7 +64,7 @@ async def switchlanguages():
         from_lang = to_lang
         to_lang = tmp_from_lang
 
-    if session.get("from_lang") and sesssion.get('to_lang'):
+    if session.get("from_lang") and session.get('to_lang'):
         tmp_session_from_lang = session['from_lang']
         session['from_lang'] = session['to_lang']
         session['to_lang'] = tmp_session_from_lang
