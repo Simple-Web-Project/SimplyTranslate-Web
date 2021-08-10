@@ -46,15 +46,26 @@ async def translate(from_language, to_language, input_text):
         input_text, from_language=from_language, to_language=to_language
     )
 
-@app.route(
-    "/api/<string:engine_name>/<string:from_language>/<string:to_language>/<string:input_text>/"
-)
-async def api(engine_name, from_language, to_language, input_text):
+@app.route("/api/translate/")
+async def api_translate():
+    engine_name = request.args.get("engine")
+    text = request.args.get("text")
+    from_language = request.args.get("from_language")
+    to_language = request.args.get("to_language")
+
+
     engine = get_engine(engine_name, engines, engines[0])
 
     return engine.translate(
-        input_text, from_language=from_language, to_language=to_language
+        text, from_language=from_language, to_language=to_language
     )
+
+@app.route("/api/get_languages/")
+async def api_get_languages():
+    engine_name = request.args.get("engine")
+    engine = get_engine(engine_name, engines, engines[0])
+
+    return engine.get_languages()
 
 
 
