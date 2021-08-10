@@ -53,8 +53,11 @@ async def api_translate():
     from_language = request.args.get("from_language")
     to_language = request.args.get("to_language")
 
-
     engine = get_engine(engine_name, engines, engines[0])
+
+    from_language = to_lang_code(from_language, engine)
+    to_language = to_lang_code(to_language, engine)
+
 
     return engine.translate(
         text, from_language=from_language, to_language=to_language
