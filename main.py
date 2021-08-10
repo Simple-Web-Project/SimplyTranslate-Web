@@ -50,8 +50,8 @@ async def translate(from_language, to_language, input_text):
 async def api_translate():
     engine_name = request.args.get("engine")
     text = request.args.get("text")
-    from_language = request.args.get("from_language")
-    to_language = request.args.get("to_language")
+    from_language = request.args.get("from")
+    to_language = request.args.get("to")
 
     engine = get_engine(engine_name, engines, engines[0])
 
