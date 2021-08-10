@@ -37,6 +37,7 @@ app = Quart(__name__)
 
 app.secret_key = urandom(30)
 
+#NOTE: Legacy Endpoint. Use "/api"
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
 )
@@ -44,6 +45,18 @@ async def translate(from_language, to_language, input_text):
     return engines[0].translate(
         input_text, from_language=from_language, to_language=to_language
     )
+
+@app.route(
+    "/api/<string:engine_name>/<string:from_language>/<string:to_language>/<string:input_text>/"
+)
+async def api(engine_name, from_language, to_language, input_text):
+    engine = get_engine(engine_name, engines, engines[0])
+
+    return engine.translate(
+        input_text, from_language=from_language, to_language=to_language
+    )
+
+
 
 
 @app.route("/switchlanguages/", methods=["POST"])
