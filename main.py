@@ -1,5 +1,4 @@
-from os import urandom
-from quart import Quart, render_template, request, redirect, session
+from quart import Quart, render_template, request, redirect, make_response
 from configparser import ConfigParser
 from urllib.parse import urlencode
 
@@ -34,8 +33,6 @@ if not engines:
     raise Exception('All translation engines are disabled')
 
 app = Quart(__name__)
-
-app.secret_key = urandom(30)
 
 #NOTE: Legacy Endpoint. Use "/api"
 @app.route(
@@ -91,11 +88,6 @@ async def switchlanguages():
         from_lang = to_lang
         to_lang = tmp_from_lang
 
-    if session.get("from_lang") and session.get('to_lang'):
-        tmp_session_from_lang = session['from_lang']
-        session['from_lang'] = session['to_lang']
-        session['to_lang'] = tmp_session_from_lang
-
     use_text_fields = request.args.get("typingiscool") == "True"
 
     """
@@ -116,10 +108,17 @@ async def switchlanguages():
         'text': text
     }
 
-    return redirect(
-        f"/?{urlencode(redirect_params)}",
-        code=302,
+    response = await make_response(
+        redirect(
+            f"/?{urlencode(redirect_params)}",
+            code=302,
+        ),
     )
+
+    response.set_cookie('from_lang', to_lang)
+    response.set_cookie('to_lang', from_lang)
+
+    return response
 
 @app.route("/typingiscool/", methods=["POST"])
 async def typingiscool():
@@ -161,14 +160,9 @@ async def index():
         # support google format
         inp = request.args.get("text", "")
 
-        from_lang = to_full_name(request.args.get("sl", "auto"), engine)
+        from_lang = to_full_name(request.args.get("sl") or request.cookies.get('from_lang') or "auto", engine)
 
-        to_lang = to_full_name(request.args.get("tl", "en"), engine)
-
-        if session.get('from_lang'):
-            from_lang = to_full_name(session['from_lang'], engine)
-        if session.get('to_lang'):
-            to_lang = to_full_name(session['to_lang'], engine)
+        to_lang = to_full_name(request.args.get("tl") or request.cookies.get('to_lang') or "en", engine)
 
     elif request.method == "POST":
         form = await request.form
@@ -178,9 +172,6 @@ async def index():
         from_lang = form.get("from_language", "Autodetect")
 
         to_lang = form.get("to_language", "English")
-
-        session['from_lang'] = to_lang_code(from_lang, engine)
-        session['to_lang'] = to_lang_code(to_lang, engine)
 
     from_l_code = None
     to_l_code = None
@@ -196,7 +187,7 @@ async def index():
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
-    return await render_template(
+    response = await make_response(await render_template(
         "index.html",
         inp=inp,
         translation=translation,
@@ -208,7 +199,13 @@ async def index():
         engines=[engine.name for engine in engines],
         supported_languages=engine.get_supported_languages(),
         use_text_fields=use_text_fields,
-    )
+    ))
+
+    if request.method == "POST":
+        response.set_cookie('from_lang', to_lang_code(from_lang, engine))
+        response.set_cookie('to_lang', to_lang_code(to_lang, engine))
+
+    return response
 
 
 @app.route("/about", methods=["GET"])
