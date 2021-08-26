@@ -82,11 +82,14 @@ async def switchlanguages():
     from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
     to_lang = to_lang_code(form.get("to_language", "English"), engine)
 
-    # if the from_lang is not auto,
+    if from_lang == "auto":
+        detected_lang = engine.detect_language(text)
+
+        if detected_lang is not None:
+            from_lang = detected_lang
+
     if from_lang != "auto":
-        tmp_from_lang = from_lang
-        from_lang = to_lang
-        to_lang = tmp_from_lang
+        from_lang, to_lang = to_lang, from_lang
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
@@ -105,7 +108,8 @@ async def switchlanguages():
         'typingiscool': use_text_fields,
         'sl': from_lang,
         'tl': to_lang,
-        'text': text
+        'text': text,
+        'could_not_switch_languages': from_lang == "auto",
     }
 
     response = await make_response(
@@ -156,6 +160,10 @@ async def index():
 
     from_lang, to_lang, inp, translation = "", "", "", None
 
+    # This is `True` when the language switch button is pressed, `from_lang` is
+    # "auto", and the engine doesn't support language detection.
+    could_not_switch_languages = False
+
     if request.method == "GET":
         # support google format
         inp = request.args.get("text", "")
@@ -164,6 +172,7 @@ async def index():
 
         to_lang = to_full_name(request.args.get("tl") or request.cookies.get('to_lang') or "en", engine)
 
+        could_not_switch_languages = request.args.get("could_not_switch_languages") == "True"
     elif request.method == "POST":
         form = await request.form
 
@@ -199,6 +208,7 @@ async def index():
         engines=[engine.name for engine in engines],
         supported_languages=engine.get_supported_languages(),
         use_text_fields=use_text_fields,
+        could_not_switch_languages=could_not_switch_languages,
     ))
 
     if request.method == "POST":

@@ -26,6 +26,10 @@
             justify-content: center;
         }
 
+        #could_not_switch_languages_text {
+            color: red;
+        }
+
         .item {
             width: 450px;
             height: 150px;
@@ -83,6 +87,10 @@
             body {
                 background-color: #212529;
                 color: #f8f9fa;
+            }
+
+            #could_not_switch_languages_text {
+                color: #F13333;
             }
 
             a:visited {
@@ -169,6 +177,13 @@
                     </select>
                 </div>
             </div>
+
+            {% if could_not_switch_languages %}
+                <center id="could_not_switch_languages_text">
+                    Sorry, {{ engine }} doesn't support switching from autodetect.
+                </center>
+                <br>
+            {% endif %}
 
             <!-- text boxes -->
             <div class="wrap">
