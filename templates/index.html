@@ -20,7 +20,7 @@
         <meta charset="UTF-8">
 
         <style>
-        #wrap {
+        .wrap {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -151,7 +151,7 @@
             {% endif %}
 
             <!-- from and to language -->
-            <div id="wrap">
+            <div class="wrap">
                 <div class="language">
                     <select name="from_language" id="from_language">
                         {{ lang_option('Autodetect', from_l) }}
@@ -171,7 +171,7 @@
             </div>
 
             <!-- text boxes -->
-            <div id="wrap">
+            <div class="wrap">
                 <textarea autofocus class="item" id="input" name="input"  placeholder="Enter Text Here">{{ inp }}</textarea>
                 <textarea class="translation item" placeholder="Translation" readonly>
                     {%- if translation != None -%}{{ translation }}{%- endif -%}
