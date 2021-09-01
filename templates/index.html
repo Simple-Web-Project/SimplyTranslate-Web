@@ -187,8 +187,8 @@
 
             <!-- text boxes -->
             <div class="wrap">
-                <textarea autofocus class="item" id="input" name="input"  placeholder="Enter Text Here">{{ inp }}</textarea>
-                <textarea class="translation item" placeholder="Translation" readonly>
+                <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="Enter Text Here">{{ inp }}</textarea>
+                <textarea class="translation item" dir="auto" placeholder="Translation" readonly>
                     {%- if translation != None -%}{{ translation }}{%- endif -%}
                 </textarea>
             </div>
