@@ -20,6 +20,32 @@
         <meta charset="UTF-8">
 
         <style>
+        /* Specifies the size of the audio container */
+        audio {
+            width: 75px;
+            height: 25px;
+        }
+
+        audio:-webkit-media-controls-panel {
+            -webkit-justify-content: center;
+            height: 25px;
+        }
+
+        /* Removes the timeline */
+        audio:-webkit-media-controls-timeline {
+            display: none !important;
+        }
+
+        /* Removes the time stamp */
+        audio:-webkit-media-controls-current-time-display {
+            display: none;
+        }
+        audio:-webkit-media-controls-time-remaining-display {
+            display: none;
+        }
+
+
+
         .wrap {
             display: flex;
             flex-wrap: wrap;
@@ -188,9 +214,22 @@
             <!-- text boxes -->
             <div class="wrap">
                 <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="Enter Text Here">{{ inp }}</textarea>
+                <!-- TTS for the input text -->
+                {%- if tts_from != None -%}
+                <audio controls>
+                    <source type="audio/mpeg" src="{{ tts_from }}">
+                </audio>
+                {%- endif -%}
+
                 <textarea class="translation item" dir="auto" placeholder="Translation" readonly>
                     {%- if translation != None -%}{{ translation }}{%- endif -%}
                 </textarea>
+                <!-- TTS for the output text -->
+                {%- if tts_to != None -%}
+                <audio controls>
+                    <source type="audio/mpeg" src="{{ tts_to }}">
+                </audio>
+                {%- endif -%}
             </div>
 
             <br>

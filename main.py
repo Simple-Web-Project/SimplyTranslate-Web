@@ -6,6 +6,8 @@ from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
 from simplytranslate_engines.utils import *
 
+import requests
+
 config = ConfigParser()
 
 config.read(['/etc/simplytranslate/shared.conf', '/etc/simplytranslate/web.conf'])
@@ -67,8 +69,29 @@ async def api_get_languages():
 
     return engine.get_languages()
 
+@app.route("/api/tts/")
+async def api_tts():
+    engine_name = request.args.get("engine")
+    text = request.args.get("text")
+    language = request.args.get("lang")
 
+    engine = get_engine(engine_name, engines, engines[0])
 
+    language = to_lang_code(language, engine)
+
+    url = engine.get_tts(text, language)
+
+    USER_AGENT = "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
+    
+    if url != None:
+        print(url)
+        return requests.get(url, headers={
+            "Referrer": None,
+            "User-Agent": USER_AGENT
+            }).content
+    else:
+        return None
+    
 
 @app.route("/switchlanguages/", methods=["POST"])
 async def switchlanguages():
@@ -196,12 +219,18 @@ async def index():
 
     use_text_fields = request.args.get("typingiscool") == "True"
 
+    # TTS
+    tts_from = f"/api/tts?engine={engine_name}&lang={from_l_code}&text={inp}"
+    tts_to = f"/api/tts?engine={engine_name}&lang={to_l_code}&text={translation}"
+
     response = await make_response(await render_template(
         "index.html",
         inp=inp,
         translation=translation,
         from_l=from_lang,
         from_l_code=from_l_code,
+        tts_from=tts_from,
+        tts_to=tts_to,
         to_l=to_lang,
         to_l_code=to_l_code,
         engine=engine.name,
