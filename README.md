@@ -3,7 +3,7 @@
 This is a simple web interface for SimplyTranslate
 
 ## List of Instances
-You can find a list of instances here: [SimplyTranslate Project Page](https://simple-web.metalune.xyz/projects/simplytranslate.html)
+You can find a list of instances here: [SimplyTranslate Project Page](https://simple-web.org/projects/simplytranslate.html)
 
 If you want to add your own instance here, please either send me an email directly to metalune@mailbox.org or tell us about it in our IRC channel #simple-web on [Libera.Chat](https://libera.chat)
 
