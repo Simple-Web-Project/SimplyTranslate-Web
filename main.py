@@ -225,10 +225,20 @@ async def index():
     # check if the engine even supports TTS
     if engine.get_tts("auto", "test") != None:
         if len(inp) > 0:
-            tts_from = f"/api/tts?engine={engine_name}&lang={from_l_code}&text={inp}"
+            params = {
+                "engine": engine_name,
+                "lang": from_l_code,
+                "text": inp
+            }
+            tts_from = f"/api/tts?{urlencode(params)}"
         if translation != None:
             if len(translation) > 0:
-                tts_to = f"/api/tts?engine={engine_name}&lang={to_l_code}&text={translation}"
+                params = {
+                    "engine": engine_name,
+                    "lang": to_l_code,
+                    "text": translation
+                }
+                tts_to = f"/api/tts?{urlencode(params)}"
 
     response = await make_response(await render_template(
         "index.html",
