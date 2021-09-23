@@ -90,8 +90,8 @@ async def api_tts():
         return requests.get(
             url, headers={"Referrer": None, "User-Agent": USER_AGENT}
         ).content
-    else:
-        return None
+
+    abort(404)
 
 
 @app.route("/switchlanguages/", methods=["POST"])
