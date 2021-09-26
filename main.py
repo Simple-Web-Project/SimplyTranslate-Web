@@ -17,7 +17,7 @@ engines = []
 if config.getboolean("google", "Enabled", fallback=True):
     engines.append(GoogleTranslateEngine())
 
-libretranslate_enabled = config.getboolean("libretranslate", "Enabled", fallback=None)
+libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
 
 if libretranslate_enabled is None:
     print(
@@ -27,9 +27,9 @@ if libretranslate_enabled is None:
 if libretranslate_enabled:
     engines.append(
         LibreTranslateEngine(
-            config["libretranslate"]["Instance"],
+            config["libre"]["Instance"],
             # `ApiKey` is not required, so use `get` to get `None` as fallback.
-            config["libretranslate"].get("ApiKey"),
+            config["libre"].get("ApiKey"),
         )
     )
 
