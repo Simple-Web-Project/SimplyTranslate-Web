@@ -1,6 +1,8 @@
-from quart import Quart, render_template, request, redirect, make_response
+from quart import Quart, render_template, request, redirect, make_response, send_file, Response
 from configparser import ConfigParser
 from urllib.parse import urlencode
+from wsgiref.util import FileWrapper
+from io import BytesIO
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
@@ -86,10 +88,11 @@ async def api_tts():
     USER_AGENT = "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
 
     if url != None:
-        print(url)
-        return requests.get(
+        b = BytesIO(requests.get(
             url, headers={"Referrer": None, "User-Agent": USER_AGENT}
-        ).content
+        ).content)
+        w = FileWrapper(b)
+        return Response(w, mimetype="audio/mpeg")
 
     abort(404)
 
@@ -235,11 +238,11 @@ async def index():
     if engine.get_tts("auto", "test") != None:
         if len(inp) > 0:
             params = {"engine": engine_name, "lang": from_l_code, "text": inp}
-            tts_from = f"/api/tts?{urlencode(params)}"
+            tts_from = f"/api/tts/?{urlencode(params)}"
         if translation != None:
             if len(translation) > 0:
                 params = {"engine": engine_name, "lang": to_l_code, "text": translation}
-                tts_to = f"/api/tts?{urlencode(params)}"
+                tts_to = f"/api/tts/?{urlencode(params)}"
 
     response = await make_response(
         await render_template(
