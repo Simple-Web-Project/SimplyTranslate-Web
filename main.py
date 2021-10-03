@@ -42,7 +42,8 @@ app = Quart(__name__)
 
 # NOTE: Legacy Endpoint. Use "/api"
 @app.route(
-    "/translate/<string:from_language>/<string:to_language>/<string:input_text>/"
+    "/translate/<string:from_language>/<string:to_language>/<string:input_text>/",
+    strict_slashes=False
 )
 async def translate(from_language, to_language, input_text):
     return engines[0].translate(
@@ -50,7 +51,7 @@ async def translate(from_language, to_language, input_text):
     )
 
 
-@app.route("/api/translate/")
+@app.route("/api/translate/", strict_slashes=False)
 async def api_translate():
     engine_name = request.args.get("engine")
     text = request.args.get("text")
@@ -65,7 +66,7 @@ async def api_translate():
     return engine.translate(text, from_language=from_language, to_language=to_language)
 
 
-@app.route("/api/get_languages/")
+@app.route("/api/get_languages/", strict_slashes=False)
 async def api_get_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
@@ -73,7 +74,7 @@ async def api_get_languages():
     return engine.get_languages()
 
 
-@app.route("/api/tts/")
+@app.route("/api/tts/", strict_slashes=False)
 async def api_tts():
     engine_name = request.args.get("engine")
     text = request.args.get("text")
@@ -97,7 +98,7 @@ async def api_tts():
     abort(404)
 
 
-@app.route("/switchlanguages/", methods=["POST"])
+@app.route("/switchlanguages/", methods=["POST"], strict_slashes=False)
 async def switchlanguages():
     form = await request.form
 
@@ -152,7 +153,7 @@ async def switchlanguages():
     return response
 
 
-@app.route("/typingiscool/", methods=["POST"])
+@app.route("/typingiscool/", methods=["POST"], strict_slashes=False)
 async def typingiscool():
     form = await request.form
 
@@ -181,7 +182,7 @@ async def typingiscool():
     )
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"], strict_slashes=False)
 async def index():
     engine_name = request.args.get("engine")
 
@@ -270,7 +271,7 @@ async def index():
     return response
 
 
-@app.route("/about", methods=["GET"])
+@app.route("/about", methods=["GET"], strict_slashes=False)
 async def about():
     return await render_template("about.html")
 
