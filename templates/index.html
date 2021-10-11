@@ -165,18 +165,18 @@
             <!-- from and to language -->
             <div class="wrap">
                 <div class="language">
-                    <select name="from_language" id="from_language">
+                    <select name="from_language" id="from_language" aria-label="Source language">
                         {{ lang_option('Autodetect', from_l) }}
                         {{ supported_lang_options(from_l) }}
                     </select>
                 </div>
 
                 <div class="switch_languages">
-                    <button id="switchbutton" title="Switch input and output languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
+                    <button id="switchbutton" aria-label="Switch languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
                 </div>
 
                 <div class="language">
-                    <select name="to_language" id="to_language">
+                    <select name="to_language" id="to_language" aria-label="Target language">
                         {{ supported_lang_options(to_l) }}
                     </select>
                 </div>
