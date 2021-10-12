@@ -282,10 +282,5 @@ async def index():
     return response
 
 
-@app.route("/about", methods=["GET"])
-async def about():
-    return await render_template("about.html")
-
-
 if __name__ == "__main__":
     app.run(port=config.getint("network", "port", fallback=5000), host=str(config.get("network", "host", fallback="0.0.0.0"))) 
