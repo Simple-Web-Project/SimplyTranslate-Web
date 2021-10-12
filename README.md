@@ -5,6 +5,7 @@ This is a simple web interface for SimplyTranslate
 ## List of Instances
 You can find a list of instances here: [SimplyTranslate Project Page](https://simple-web.org/projects/simplytranslate.html)
 
+If you want to integrate a list of instances in your project, you can use this endpoint to always have an up-to-date list of all instances known to us: [https://simple-web.org/instances/simplytranslate](https://simple-web.org/instances/simplytranslate)
 If you want to add your own instance here, please either send me an email directly to metalune@mailbox.org or tell us about it in our IRC channel #simple-web on [Libera.Chat](https://libera.chat)
 
 ## How to install/use
