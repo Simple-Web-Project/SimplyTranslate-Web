@@ -1,1 +1,2 @@
 quart
+git+https://git.sr.ht/~metalune/simplytranslate_engines

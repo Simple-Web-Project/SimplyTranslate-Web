@@ -11,13 +11,6 @@ If you want to integrate a list of instances in your project, you can use this e
 If you want to add your own instance here, please either send me an email directly to metalune@mailbox.org or tell us about it in our IRC channel #simple-web on [Libera.Chat](https://libera.chat)
 
 ## How to install/use
-### Clone simplytranslate_engines repository and install it
-```sh
-git clone https://git.sr.ht/~metalune/simplytranslate_engines
-cd simplytranslate_engines
-sudo python3 setup.py install
-cd ..
-```
 
 ### Clone the repository
 ```sh
