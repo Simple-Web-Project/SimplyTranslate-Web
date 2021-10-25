@@ -84,7 +84,7 @@ async def api_get_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    return engine.get_languages()
+    return engine.get_supported_languages()
 
 
 @app.route("/api/tts/")
