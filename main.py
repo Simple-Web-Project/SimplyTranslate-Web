@@ -25,11 +25,11 @@ config.read(["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"
 
 engines = []
 
-if config.getboolean("deepl", "Enabled", fallback=False):
-    engines.append(DeeplEngine())
-
 if config.getboolean("google", "Enabled", fallback=True):
     engines.append(GoogleTranslateEngine())
+
+if config.getboolean("deepl", "Enabled", fallback=False):
+    engines.append(DeeplEngine())
 
 libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
 
