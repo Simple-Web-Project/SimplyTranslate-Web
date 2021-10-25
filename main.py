@@ -14,6 +14,7 @@ from io import BytesIO
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
+from simplytranslate_engines.deepl import DeeplEngine
 from simplytranslate_engines.utils import *
 
 import requests
@@ -23,6 +24,9 @@ config = ConfigParser()
 config.read(["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"])
 
 engines = []
+
+if config.getboolean("deepl", "Enabled", fallback=False):
+    engines.append(DeeplEngine())
 
 if config.getboolean("google", "Enabled", fallback=True):
     engines.append(GoogleTranslateEngine())
