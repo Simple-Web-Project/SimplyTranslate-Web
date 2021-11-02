@@ -15,6 +15,7 @@ from io import BytesIO
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
 from simplytranslate_engines.deepl import DeeplEngine
+from simplytranslate_engines.icibatranslate import IcibaTranslateEngine
 from simplytranslate_engines.utils import *
 
 import requests
@@ -30,6 +31,9 @@ if config.getboolean("google", "Enabled", fallback=True):
 
 if config.getboolean("deepl", "Enabled", fallback=False):
     engines.append(DeeplEngine())
+
+if config.getboolean("iciba", "Enabled", fallback=False):
+    engines.append(IcibaTranslateEngine())
 
 libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
 
