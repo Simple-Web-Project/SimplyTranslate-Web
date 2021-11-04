@@ -134,10 +134,10 @@
                     {% for _engine in engines %}
                         <a style="
                                   {# Show the currently selected engine by underlining it #}
-                                  {% if engine == _engine %}
+                                  {% if engine == _engine.name %}
                                     text-decoration: underline;
                                   {% endif %}
-                            " href="/?engine={{ _engine }}&typingiscool={{ use_text_fields }}">
+                            " href="/?engine={{ _engine.name }}&typingiscool={{ use_text_fields }}">
                             {# These hyphens remove whitespace before/after the block.
                                They're here to remove the trailing space in the Google
                                engine link, which gets on yours truly's nerves.
@@ -145,17 +145,7 @@
                                but it didn't work for whatever reason.
                             #}
 
-                            {%- if _engine == "google" -%}
-                                Google
-                            {%- elif _engine == "deepl" -%}
-                                DeepL (Testing)
-                            {%- elif _engine == "libre" -%}
-                                LibreTranslate
-                            {%- elif _engine == "iciba" -%}
-                                ICIBA
-                            {%- else -%}
-                                {{ _engine }}
-                            {%- endif -%}
+                            {{ _engine.display_name}}
                         </a>
 
                         {% if not loop.last %}

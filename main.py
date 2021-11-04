@@ -276,7 +276,9 @@ async def index():
             to_l=to_lang,
             to_l_code=to_l_code,
             engine=engine.name,
-            engines=[engine.name for engine in engines],
+            #engines=[engine.name for engine in engines],
+            engines=engines,
+            
             supported_languages=engine.get_supported_languages(),
             use_text_fields=use_text_fields,
             could_not_switch_languages=could_not_switch_languages,
