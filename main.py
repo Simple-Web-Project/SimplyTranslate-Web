@@ -105,7 +105,7 @@ async def api_tts():
 
     USER_AGENT = "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
 
-    if url != None:
+    if url is not None:
         b = BytesIO(
             requests.get(
                 url, headers={"Referrer": None, "User-Agent": USER_AGENT}
@@ -255,11 +255,11 @@ async def index():
     tts_from = None
     tts_to = None
     # check if the engine even supports TTS
-    if engine.get_tts("auto", "test") != None:
+    if engine.get_tts("auto", "test") is not None:
         if len(inp) > 0:
             params = {"engine": engine_name, "lang": from_l_code, "text": inp}
             tts_from = f"/api/tts/?{urlencode(params)}"
-        if translation != None:
+        if translation is not None:
             if len(translation) > 0:
                 params = {"engine": engine_name, "lang": to_l_code, "text": translation}
                 tts_to = f"/api/tts/?{urlencode(params)}"
