@@ -68,14 +68,17 @@ async def translate(from_language, to_language, input_text):
     )
 
 
-@app.route("/api/translate/", methods=["POST"])
+@app.route("/api/translate/", methods=["GET", "POST"])
 async def api_translate():
-    form = await request.form
+    if request.method == "POST":
+        args = await request.form
+    elif request.method == "GET":
+        args = request.args
 
-    engine_name = request.args.get("engine")
-    text = form.get("text")
-    from_language = form.get("from")
-    to_language = form.get("to")
+    engine_name = args.get("engine")
+    text = args.get("text")
+    from_language = args.get("from")
+    to_language = args.get("to")
 
     engine = get_engine(engine_name, engines, engines[0])
 
