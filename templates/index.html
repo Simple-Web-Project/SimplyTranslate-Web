@@ -126,7 +126,7 @@
             <header><h1>SimplyTranslate</h1></header>
         </center>
 
-        <form action="/?engine={{ engine }}" method="POST">
+        <form action="/?engine={{ engine }}" method="POST" id="translation-form">
 
             <!-- engine buttons -->
             {% if engines|length > 1 %}
@@ -240,5 +240,14 @@
                 <a target="_new" href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
             </center>
         </footer>
+
+        <script>
+            // this code submits the translation form when pressing Ctrl/Meta+Enter while focussed on the input text field
+            document.getElementById("input").addEventListener("keydown", function(event) {
+                if (event.keyCode === 13 && (event.metaKey || event.ctrlKey)) {
+                    document.getElementById("translation-form").submit();
+                }
+            });
+        </script>
     </body>
 </html>
