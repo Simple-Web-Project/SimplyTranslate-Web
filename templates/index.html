@@ -138,7 +138,7 @@
                                   {% if engine == _engine.name %}
                                     text-decoration: underline;
                                   {% endif %}
-                            " href="/?engine={{ _engine.name }}&typingiscool={{ use_text_fields }}">
+                            " href="/?engine={{ _engine.name }}">
                             {# These hyphens remove whitespace before/after the block.
                                They're here to remove the trailing space in the Google
                                engine link, which gets on yours truly's nerves.
@@ -160,20 +160,28 @@
             <!-- from and to language -->
             <div class="wrap">
                 <div class="language">
-                    <select name="from_language" id="from_language" aria-label="Source language">
-                        {{ lang_option('Autodetect', from_l) }}
-                        {{ supported_lang_options(from_l) }}
-                    </select>
+                    {% if use_text_fields %}
+                        <input type="text" id="from_language" name="from_language" aria-label="Source language" value="{{ from_l }}" placeholder="from" />
+                    {% else %}
+                        <select name="from_language" id="from_language" aria-label="Source language">
+                            {{ lang_option('Autodetect', from_l) }}
+                            {{ supported_lang_options(from_l) }}
+                        </select>
+                    {% endif %}
                 </div>
 
                 <div class="switch_languages">
-                    <button id="switchbutton" aria-label="Switch languages" formaction="/switchlanguages/?engine={{ engine }}&typingiscool={{ use_text_fields }}" type="submit"><-></button>
+                    <button id="switchbutton" aria-label="Switch languages" formaction="/switchlanguages/?engine={{ engine }}" type="submit"><-></button>
                 </div>
 
                 <div class="language">
-                    <select name="to_language" id="to_language" aria-label="Target language">
-                        {{ supported_lang_options(to_l) }}
-                    </select>
+                    {% if use_text_fields %}
+                        <input type="text" id="to_language" aria-label="Target language" name="to_language" value="{{ to_l }}" placeholder="from" />
+                    {% else %}
+                        <select name="to_language" id="to_language" aria-label="Target language">
+                            {{ supported_lang_options(to_l) }}
+                        </select>
+                    {% endif %}
                 </div>
             </div>
 
@@ -189,7 +197,7 @@
                 <div class="item-wrapper">
                     <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="Enter Text Here">{{ inp }}</textarea>
                     <!-- TTS for the input text -->
-                    {%- if tts_from is not none -%}
+                    {%- if tts_enabled and tts_from is not none -%}
                         <br>
                         <center>
                             <audio controls>
@@ -206,7 +214,7 @@
                         {%- if translation is not none -%}{{ translation }}{%- endif -%}
                     </textarea>
                     <!-- TTS for the output text -->
-                    {%- if tts_to is not none -%}
+                    {%- if tts_enabled and tts_to is not none -%}
                         <br>
                         <center>
                             <audio controls>
@@ -237,7 +245,7 @@
 
         <footer>
             <center>
-                <a target="_new" href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
+                <a href="/prefs">Preferences</a> | <a target="_new" href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
             </center>
         </footer>
 

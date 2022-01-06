@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>SimplyTranslate - Preferences</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="description" content="Experience simple and private Google translations">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <style>
+        body {
+            max-width: 800px;
+            margin: 10px auto;
+        }
+
+        @media screen and (prefers-color-scheme: dark) {
+            body {
+                background-color: #212529;
+                color: #f8f9fa;
+            }
+
+            a:visited {
+                color: #9759f6;
+            }
+
+            a {
+                color: #599bf6;
+            }
+        }
+        </style>
+    </head>
+
+    <body>
+        <form action="/prefs" method="POST">
+            <label for="use_text_fields">Use text fields for language selection:</label>
+            <input
+                type="checkbox"
+                id="use_text_fields"
+                name="use_text_fields"
+                {% if use_text_fields %}checked{% endif %}>
+
+            <br>
+
+            <label for="tts_enabled">Enable text-to-speech:</label>
+
+            <input
+              type="checkbox"
+              id="tts_enabled"
+              name="tts_enabled"
+              {% if tts_enabled %}checked{% endif %}>
+
+            <br>
+            <br>
+
+            <button type="submit">Save preferences</button>
+        </form>
+
+        <br>
+
+        <a href="/">Back To The Translator</a>
+    </body>
+</html>

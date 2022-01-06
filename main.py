@@ -58,6 +58,34 @@ app = Quart(__name__)
 
 app.url_map.strict_slashes = False
 
+
+def str_to_bool(s, **kwargs):
+    if s is None and "default" in kwargs:
+        return kwargs["default"]
+
+    return s == "on" or s == "True"
+
+
+def bool_to_str(b):
+    return "True" if b else "False"
+
+
+def dict_to_prefs(d, **kwargs):
+    # For whatever reason, in HTML forms, the values of any unchecked
+    # checkboxes are not sent at all, so we have this parameter that basically
+    # disables the defaulting for any boolean settings.
+    post_form = kwargs.get("post_form")
+
+    return {
+        # We don't need to consider `post_form` for `use_text_fields` since
+        # it's off by default anyway, unlike `tts_enabled`.
+        "use_text_fields": str_to_bool(d.get("use_text_fields")),
+        "tts_enabled": str_to_bool(
+            d.get("tts_enabled"), default=False if post_form else True
+        ),
+    }
+
+
 # NOTE: Legacy Endpoint. Use "/api"
 @app.route(
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/",
@@ -86,6 +114,37 @@ async def api_translate():
     to_language = to_lang_code(to_language, engine)
 
     return engine.translate(text, from_language=from_language, to_language=to_language)
+
+
+@app.route("/prefs", methods=["POST", "GET"])
+async def prefs():
+    if request.method == "POST":
+        prefs = dict_to_prefs(await request.form, post_form=True)
+    elif request.method == "GET":
+        prefs = dict_to_prefs(request.cookies)
+
+    use_text_fields = prefs["use_text_fields"]
+    tts_enabled = prefs["tts_enabled"]
+
+    if request.method == "GET":
+        return await render_template(
+            "prefs.html",
+            use_text_fields=use_text_fields,
+            tts_enabled=tts_enabled,
+        )
+    elif request.method == "POST":
+        response = await make_response(
+            await render_template(
+                "prefs.html",
+                use_text_fields=use_text_fields,
+                tts_enabled=tts_enabled,
+            )
+        )
+
+        response.set_cookie("use_text_fields", bool_to_str(use_text_fields))
+        response.set_cookie("tts_enabled", bool_to_str(tts_enabled))
+
+        return response
 
 
 @app.route("/api/get_languages/")
@@ -143,8 +202,6 @@ async def switchlanguages():
     if from_lang != "auto":
         from_lang, to_lang = to_lang, from_lang
 
-    use_text_fields = request.args.get("typingiscool") == "True"
-
     """
     In case we ever want to also switch the translated text with the to-be-translated text, this is a good start.
 
@@ -157,7 +214,6 @@ async def switchlanguages():
 
     redirect_params = {
         "engine": engine_name,
-        "typingiscool": use_text_fields,
         "sl": from_lang,
         "tl": to_lang,
         "text": text,
@@ -175,35 +231,6 @@ async def switchlanguages():
     response.set_cookie("to_lang", from_lang)
 
     return response
-
-
-@app.route("/typingiscool/", methods=["POST"])
-async def typingiscool():
-    form = await request.form
-
-    engine_name = request.args.get("engine")
-
-    engine = get_engine(engine_name, engines, engines[0])
-
-    text = form.get("input", "")
-    from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
-    to_lang = to_lang_code(form.get("to_language", "English"), engine)
-
-    use_text_fields = request.args.get("typingiscool") == "True"
-    use_text_fields = not use_text_fields
-
-    redirect_params = {
-        "engine": engine_name,
-        "typingiscool": use_text_fields,
-        "sl": from_lang,
-        "tl": to_lang,
-        "text": text,
-    }
-
-    return redirect(
-        f"/?{urlencode(redirect_params)}",
-        code=302,
-    )
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -230,8 +257,8 @@ async def index():
             request.args.get("tl") or request.cookies.get("to_lang") or "en", engine
         )
 
-        could_not_switch_languages = (
-            request.args.get("could_not_switch_languages") == "True"
+        could_not_switch_languages = str_to_bool(
+            request.args.get("could_not_switch_languages")
         )
     elif request.method == "POST":
         form = await request.form
@@ -254,8 +281,6 @@ async def index():
             from_language=from_l_code,
         )
 
-    use_text_fields = request.args.get("typingiscool") == "True"
-
     # TTS
     tts_from = None
     tts_to = None
@@ -269,6 +294,8 @@ async def index():
                 params = {"engine": engine_name, "lang": to_l_code, "text": translation}
                 tts_to = f"/api/tts/?{urlencode(params)}"
 
+    prefs = dict_to_prefs(request.cookies)
+
     response = await make_response(
         await render_template(
             "index.html",
@@ -281,11 +308,11 @@ async def index():
             to_l=to_lang,
             to_l_code=to_l_code,
             engine=engine.name,
-            #engines=[engine.name for engine in engines],
+            # engines=[engine.name for engine in engines],
             engines=engines,
-            
             supported_languages=engine.get_supported_languages(),
-            use_text_fields=use_text_fields,
+            use_text_fields=prefs["use_text_fields"],
+            tts_enabled=prefs["tts_enabled"],
             could_not_switch_languages=could_not_switch_languages,
         )
     )
@@ -298,4 +325,7 @@ async def index():
 
 
 if __name__ == "__main__":
-    app.run(port=config.getint("network", "port", fallback=5000), host=str(config.get("network", "host", fallback="0.0.0.0"))) 
+    app.run(
+        port=config.getint("network", "port", fallback=5000),
+        host=str(config.get("network", "host", fallback="0.0.0.0")),
+    )
