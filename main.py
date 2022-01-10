@@ -158,14 +158,24 @@ async def api_get_source_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    return engine.get_supported_source_languages()
+    langs = engine.get_supported_source_languages()
+    lang_list = ""
+    for lang in langs:
+        lang_list += f"{lang}\n{langs[lang]}\n"
+
+    return lang_list
 
 @app.route("/api/get_target_languages/")
 async def api_get_target_languages():
-    engine_name = requests.args.get("engine")
+    engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    return engine.get_supported_target_languages()
+    langs = engine.get_supported_target_languages()
+    lang_list = ""
+    for lang in langs:
+        lang_list += f"{lang}\n{langs[lang]}\n"
+
+    return lang_list
 
 
 @app.route("/api/tts/")
