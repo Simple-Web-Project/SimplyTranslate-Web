@@ -108,6 +108,12 @@ async def api_translate():
     from_language = args.get("from")
     to_language = args.get("to")
 
+    if from_language == None:
+        from_language = "auto"
+
+    if to_language == None:
+        to_language = "en"
+
     engine = get_engine(engine_name, engines, engines[0])
 
     from_language = to_lang_code(from_language, engine)
@@ -147,12 +153,19 @@ async def prefs():
         return response
 
 
-@app.route("/api/get_languages/")
-async def api_get_languages():
+@app.route("/api/get_source_languages/")
+async def api_get_source_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    return engine.get_supported_languages()
+    return engine.get_supported_source_languages()
+
+@app.route("/api/get_target_languages/")
+async def api_get_target_languages():
+    engine_name = requests.args.get("engine")
+    engine = get_engine(engine_name, engines, engines[0])
+
+    return engine.get_supported_target_languages()
 
 
 @app.route("/api/tts/")
@@ -250,11 +263,11 @@ async def index():
         inp = request.args.get("text", "")
 
         from_lang = to_full_name(
-            request.args.get("sl") or request.cookies.get("from_lang") or "auto", engine
+            request.args.get("sl") or request.cookies.get("from_lang") or "auto", engine, "source"
         )
 
         to_lang = to_full_name(
-            request.args.get("tl") or request.cookies.get("to_lang") or "en", engine
+            request.args.get("tl") or request.cookies.get("to_lang") or "en", engine, "target"
         )
 
         could_not_switch_languages = str_to_bool(
@@ -310,7 +323,8 @@ async def index():
             engine=engine.name,
             # engines=[engine.name for engine in engines],
             engines=engines,
-            supported_languages=engine.get_supported_languages(),
+            supported_source_languages=engine.get_supported_source_languages(),
+            supported_target_languages=engine.get_supported_target_languages(),
             use_text_fields=prefs["use_text_fields"],
             tts_enabled=prefs["tts_enabled"],
             could_not_switch_languages=could_not_switch_languages,

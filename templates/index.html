@@ -4,8 +4,14 @@
     <option value="{{ lang_name }}" {{ 'selected' if current_lang == lang_name else '' }}>{{ lang_name }}</option>
 {% endmacro %}
 
-{% macro supported_lang_options(current_lang) %}
-    {% for lang_name in supported_languages.keys() %}
+{% macro supported_source_lang_options(current_lang) %}
+    {% for lang_name in supported_source_languages.keys() %}
+        {{ lang_option(lang_name, current_lang) }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro supported_target_lang_options(current_lang) %}
+    {% for lang_name in supported_target_languages.keys() %}
         {{ lang_option(lang_name, current_lang) }}
     {% endfor %}
 {% endmacro %}
@@ -164,8 +170,7 @@
                         <input type="text" id="from_language" name="from_language" aria-label="Source language" value="{{ from_l }}" placeholder="from" />
                     {% else %}
                         <select name="from_language" id="from_language" aria-label="Source language">
-                            {{ lang_option('Autodetect', from_l) }}
-                            {{ supported_lang_options(from_l) }}
+                            {{ supported_source_lang_options(from_l) }}
                         </select>
                     {% endif %}
                 </div>
@@ -179,7 +184,7 @@
                         <input type="text" id="to_language" aria-label="Target language" name="to_language" value="{{ to_l }}" placeholder="from" />
                     {% else %}
                         <select name="to_language" id="to_language" aria-label="Target language">
-                            {{ supported_lang_options(to_l) }}
+                            {{ supported_target_lang_options(to_l) }}
                         </select>
                     {% endif %}
                 </div>
