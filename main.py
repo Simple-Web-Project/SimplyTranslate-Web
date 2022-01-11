@@ -153,7 +153,7 @@ async def prefs():
         return response
 
 
-@app.route("/api/get_source_languages/")
+@app.route("/api/source_languages/")
 async def api_get_source_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
@@ -165,7 +165,7 @@ async def api_get_source_languages():
 
     return lang_list
 
-@app.route("/api/get_target_languages/")
+@app.route("/api/target_languages/")
 async def api_get_target_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
