@@ -31,6 +31,14 @@ python3 main.py
 uvicorn main:app --port 5000
 ```
 
+## How to contribute
+1. Setup git-email: https://git-send-email.io
+2. Clone the repo you want: `git clone https://git.sr.ht/~metalune/simplytranslate_web`
+3. Branch it: `git checkout -b my-cool-changes`
+4. Add your changes: `git add .` and commit them `git commit -m "My Cool Changes"`
+5. Set mail-to: `git config sendemail.to '~metalune/simplytranslate-devel@lists.sr.ht'`
+6. Send your commit: `git send-email master`
+
 ## API
 [Documentation](./api.md)
 
