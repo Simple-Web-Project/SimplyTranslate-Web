@@ -217,7 +217,7 @@
 
                 <div class="item-wrapper">
                     <textarea class="translation item" dir="auto" placeholder="Translation" readonly>
-                        {%- if translation is not none -%}{{ translation }}{%- endif -%}
+                        {%- if translation is not none -%}{%- if translation['translated-text'] is not none -%}{{ translation['translated-text'] }}{%- endif -%}{%- endif -%}
                     </textarea>
                     <!-- TTS for the output text -->
                     {%- if tts_enabled and tts_to is not none -%}

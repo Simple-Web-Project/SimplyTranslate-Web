@@ -1,0 +1,200 @@
+form.the_grid {
+    display: grid;
+    margin: auto;
+    width: 1100px;
+    gap: 10px;
+    grid-template-areas:
+        "translation_engines translation_engines"
+        "from_to_langs from_to_langs"
+        "text_input text_output"
+        "tts_input tts_output"
+        "translation_button translation_button"
+        "definitions translations";
+
+}
+
+div.translation_engines {
+    grid-area: translation_engines;
+}
+
+div.from_to_langs {
+    grid-area: from_to_langs;
+}
+
+div.textarea {
+    width: 100%;
+    display: flex;
+    margin: auto;
+}
+
+div.text_input {
+    justify-content: end;
+    grid-area: text_input;
+}
+
+div.text_output {
+    justify-content: start;
+    grid-area: text_output;
+}
+
+div.tts_input {
+    grid-area: tts_input;
+}
+
+div.tts_output {
+    grid-area: tts_output;
+}
+
+div.definitions {
+    grid-area: definitions;
+}
+
+div.translations {
+    grid-area: translations;
+}
+
+div.translation_button {
+    grid-area: translation_button;
+}
+
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#could_not_switch_languages_text {
+    color: red;
+}
+
+.item {
+    max-width: 500px;
+    height: 200px;
+}
+
+.language {
+    height: 50px;
+    margin: 0px 10px;
+}
+
+.switch_languages {
+    height: 50px;
+    margin: 0px 5px;
+}
+
+button {
+    font-size: 1rem;
+    padding: 4px 10px;
+    border: 2px solid #888888;
+}
+
+input,
+select,
+textarea {
+    font-size: 1rem;
+    padding: 4px;
+    border: 2px solid #888888;
+}
+
+textarea {
+    resize: vertical;
+    height: 5rem;
+    font-family: sans-serif;
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    border-color: #478061;
+    outline: 1px solid #478061;
+}
+
+
+body {
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+.def_type {
+    color: cyan;
+    text-transform: capitalize;
+}
+
+.syn {
+    color: burlywood;
+}
+
+.syn_type {
+    color: cyan;
+}
+
+.use_in_sentence {
+    color: yellow;
+}
+
+@media screen and (max-width: 1200px) {
+
+    div.text_input, div.text_output{
+        justify-content: center;
+    }
+
+    form.the_grid {
+        display: grid;
+        width: 90vw;
+        grid-template-areas:
+            "translation_engines translation_engines"
+            "from_to_langs from_to_langs"
+            "text_input text_input"
+            "tts_input tts_input"
+            "text_output text_output"
+            "tts_output tts_output"
+            "translation_button translation_button"
+            "definitions definitions"
+            "translations translations";
+
+    }
+}
+
+@media screen and (max-width: 600px) {
+    div.text_input {
+        width: 95%;
+        margin: auto;
+    }
+
+    div.text_output {
+        width: 98%;
+        margin: auto;
+    }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+        color: #f8f9fa;
+    }
+
+    #could_not_switch_languages_text {
+        color: #F13333;
+    }
+
+    a:visited {
+        color: #9759f6;
+        text-decoration: none;
+    }
+
+    a {
+        color: #599bf6;
+        text-decoration: none;
+    }
+
+    input,
+    select,
+    button,
+    textarea {
+        background-color: #131618;
+        border-color: #495057;
+        color: #f8f9fa;
+    }
+}

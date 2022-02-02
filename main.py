@@ -125,6 +125,33 @@ async def api_translate():
 
     return engine.translate(text, from_language=from_language, to_language=to_language)
 
+# @app.route("/api/translate_advanced/", methods=["GET", "POST"])
+# async def api_translate_advanced():
+#     if request.method == "POST":
+#         args = await request.form
+#     elif request.method == "GET":
+#         args = request.args
+
+#     engine_name = args.get("engine")
+    
+#     text = args.get("text")
+#     from_language = args.get("from")
+#     to_language = args.get("to")
+
+#     if from_language == None:
+#         from_language = "auto"
+
+#     if to_language == None:
+#         to_language = "en"
+
+#     engine = get_engine(engine_name, engines, engines[0])
+
+#     from_language = to_lang_code(from_language, engine)
+#     to_language = to_lang_code(to_language, engine)
+
+#     if engine_name != "google":
+#         return ""
+#     return engine.translate(text, from_language=from_language, to_language=to_language)
 
 @app.route("/prefs", methods=["POST", "GET"])
 async def prefs():
@@ -323,9 +350,14 @@ async def index():
 
     prefs = dict_to_prefs(request.cookies)
 
+    html_template = "index.html"
+
+    if engine_name == "google":
+        html_template = "google.html"
+
     response = await make_response(
         await render_template(
-            "index.html",
+            html_template,
             inp=inp,
             translation=translation,
             from_l=from_lang,

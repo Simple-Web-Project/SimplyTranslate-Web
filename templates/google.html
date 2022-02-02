@@ -1,0 +1,228 @@
+<!doctype html>
+
+{% macro lang_option(lang_name, current_lang) %}
+    <option value="{{ lang_name }}" {{ 'selected' if current_lang == lang_name else '' }}>{{ lang_name }}</option>
+{% endmacro %}
+
+{% macro supported_source_lang_options(current_lang) %}
+    {% for lang_name in supported_source_languages.keys() %}
+        {{ lang_option(lang_name, current_lang) }}
+    {% endfor %}
+{% endmacro %}
+
+{% macro supported_target_lang_options(current_lang) %}
+    {% for lang_name in supported_target_languages.keys() %}
+        {{ lang_option(lang_name, current_lang) }}
+    {% endfor %}
+{% endmacro %}
+
+
+<html lang="en">
+    <head>
+        <title>SimplyTranslate</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="description" content="Experience simple and private Google translations">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='styles/google.css') }}">
+    </head>
+
+    <body>
+
+        <center>
+            <header><h1>SimplyTranslate</h1></header>
+        </center>
+
+
+        <form class="the_grid" action="/?engine={{ engine }}" method="POST" id="translation-form">
+
+            {% if engines|length > 1 %}
+                <div class="translation_engines">
+                    <center>
+                        Translation Engine
+                        {% for _engine in engines %}
+                            <a style="
+                                    {# Show the currently selected engine by underlining it #}
+                                    {% if engine == _engine.name %}
+                                        text-decoration: underline;
+                                    {% endif %}
+                                " href="/?engine={{ _engine.name }}">
+                                {# These hyphens remove whitespace before/after the block.
+                                They're here to remove the trailing space in the Google
+                                engine link, which gets on yours truly's nerves.
+                                I tried to put them just at the end only (i.e. `-%}`),
+                                but it didn't work for whatever reason.
+                                #}
+
+                                {{ _engine.display_name}}
+                            </a>
+
+                            {% if not loop.last %}
+                                |
+                            {% endif %}
+                        {% endfor %}
+                    </center>
+                </div>
+            {% endif %}
+
+            <div class="from_to_langs">
+                <div class="wrap">
+                    <div class="language">
+                        {% if use_text_fields %}
+                            <input type="text" id="from_language" name="from_language" aria-label="Source language" value="{{ from_l }}" placeholder="from" />
+                        {% else %}
+                            <select name="from_language" id="from_language" aria-label="Source language">
+                                {{ supported_source_lang_options(from_l) }}
+                            </select>
+                        {% endif %}
+                    </div>
+
+                    <div class="switch_languages">
+                        <button id="switchbutton" aria-label="Switch languages" formaction="/switchlanguages/?engine={{ engine }}" type="submit"><-></button>
+                    </div>
+
+                    <div class="language">
+                        {% if use_text_fields %}
+                            <input type="text" id="to_language" aria-label="Target language" name="to_language" value="{{ to_l }}" placeholder="from" />
+                        {% else %}
+                            <select name="to_language" id="to_language" aria-label="Target language">
+                                {{ supported_target_lang_options(to_l) }}
+                            </select>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                {% if could_not_switch_languages %}
+                    <center id="could_not_switch_languages_text">
+                        Sorry, {{ engine }} doesn't support switching from autodetect.
+                    </center>
+                    <br>
+                {% endif %}
+            </div>
+            <div class="text_input textarea">
+                <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="Enter Text Here">{{ inp }}</textarea>
+            </div>
+
+            <div class="text_output textarea">
+                <textarea class="translation item" dir="auto" placeholder="Translation" readonly>
+                    {%- if translation is not none -%}{{ translation["translated-text" ]}}{%- endif -%}
+                </textarea>
+            </div>
+
+            {% if tts_enabled and tts_from is not none %}
+                <div class="tts_input">
+                    <center>
+                        <audio controls>
+                            <source type="audio/mpeg" src="{{ tts_from }}">
+                        </audio>
+                    </center>
+                </div>
+            {% endif %}
+
+            {% if tts_enabled and tts_to is not none %}
+                <div class="tts_output">
+                    <center>
+                        <audio controls>
+                            <source type="audio/mpeg" src="{{ tts_to }}">
+                        </audio>
+                    </center>
+                </div>
+            {% endif %}
+
+            {% if translation is not none and "definitions" in translation %}
+                <div class="definitions">
+                    <p>
+                        {% for k in translation["definitions"] %}
+                            <span class="def_type">{{k}}</span>
+                            <ol>
+                                {%for definition_item in translation["definitions"][k]%}
+                                    <li>
+                                        {{definition_item["definition"]}}
+                                        <br>
+                                        {% if "use-in-sentence" in definition_item %}
+                                            <span class="use_in_sentence">
+                                                "{{definition_item["use-in-sentence"]}}"
+                                            </span>
+                                            <br>
+                                        {% endif %}
+                                        {% if "synonyms" in definition_item %} 
+                                            {% for synonym_type in definition_item["synonyms"] %}
+                                                <span class="syn">
+                                                    {% if synonym_type != "" %}
+                                                        <br>    
+                                                        <span class="syn_type">{{synonym_type}}: </span>
+                                                    {% endif %}
+                                                    {{", ".join(definition_item["synonyms"][synonym_type])}}
+                                                </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </li>
+                                    <br>
+                                {% endfor %}    
+                            </ol>
+                        {%endfor%}
+                    </p>
+                </div>
+            {% endif %}
+            
+            {% if translation is not none and "translations" in translation %}
+                <div class="translations">
+                    <p>
+                        {%for k in translation["translations"]%}
+                            <span class="def_type">{{k}}</span>
+                            <ul>
+                                {%for word in translation["translations"][k]%}
+                                    <li>
+                                        <span class="syn_type">{{word}}:</span>
+                                        <span class="syn">{{", ".join(translation["translations"][k][word]["words"])}}</span>
+                                        <span class="syn_type">{{translation["translations"][k][word]["frequency"]}}</span>
+                                    </li>
+                                    <br>
+                                {%endfor%}
+                            </ul>
+                            <br>
+                        {%endfor%}
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="translation_button">
+                <center>
+                    <!-- translate button -->
+                    <button type="submit">Translate with {{ engine }}!</button>
+
+                    <br>
+                    <br>
+                    <!-- link to share translation -->
+                    <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">
+                        Copy this link to share this translation with others
+                    </a>
+                </center>
+            </div>
+
+        </form>
+
+        <br>
+        <br>
+        <br>
+
+        <footer>
+            <center>
+                <a href="/prefs">Preferences</a>
+                &nbsp;|&nbsp;
+                <a target="_new" href="https://simple-web.org/projects/simplytranslate.html">Project Page</a>
+                &nbsp;|&nbsp;
+                <a href="https://simple-web.org">Simple Web Project</a>
+            </center>
+        </footer>
+
+        <script>
+            // this code submits the translation form when pressing Ctrl/Meta+Enter while focussed on the input text field
+            document.getElementById("input").addEventListener("keydown", function(event) {
+                if (event.keyCode === 13 && (event.metaKey || event.ctrlKey)) {
+                    document.getElementById("translation-form").submit();
+                }
+            });
+        </script>
+    </body>
+</html>
