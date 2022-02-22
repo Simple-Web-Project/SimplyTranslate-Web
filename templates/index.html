@@ -94,6 +94,54 @@
             font-family: sans-serif;
         }
 
+        #definitions_and_translations {
+            display: grid;
+            margin: auto;
+            width: 1100px;
+            gap: 10px;
+            grid-template-areas: "definitions translations";
+
+        }
+
+        .def_type {
+            color: #007979;
+            text-transform: capitalize;
+        }
+
+        .syn {
+            color: #804700;
+        }
+
+        .syn_type {
+            color: #007979;
+        }
+
+        .use_in_sentence {
+            color: #009902;
+        }
+
+        .definitions li:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+
+        @media screen and (max-width: 1200px) {
+            #definitions_and_translations {
+                display: grid;
+                width: 90vw;
+                grid-template-areas:
+                    "definitions definitions"
+                    "translations translations";
+            }
+        }
+
+
+        div.definitions {
+            grid-area: definitions;
+        }
+
+        div.translations {
+            grid-area: translations;
+        }
 
         @media screen and (prefers-color-scheme: dark) {
             body {
@@ -122,6 +170,23 @@
                 background-color: #131618;
                 border-color: #495057;
                 color: #f8f9fa;
+            }
+
+            .def_type {
+                color: cyan;
+                text-transform: capitalize;
+            }
+
+            .syn {
+                color: burlywood;
+            }
+
+            .syn_type {
+                color: cyan;
+            }
+
+            .use_in_sentence {
+                color: yellow;
             }
         }
         </style>
@@ -242,6 +307,61 @@
                 <!-- link to share translation -->
                 <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
             </center>
+
+            <br>
+
+            <div id="definitions_and_translations">
+                {% if translation is not none and "definitions" in translation %}
+                    <div class="definitions">
+                        {% for type, definitions in translation["definitions"].items() %}
+                            <span class="def_type">{{type}}</span>
+                            <ol>
+                                {% for definition_item in definitions %}
+                                    <li>
+                                        {{definition_item["definition"]}}
+                                        <br>
+                                        {% if "use-in-sentence" in definition_item %}
+                                            <span class="use_in_sentence">
+                                                "{{definition_item["use-in-sentence"]}}"
+                                            </span>
+                                            <br>
+                                        {% endif %}
+                                        {% if "synonyms" in definition_item %}
+                                            {% for synonym_type in definition_item["synonyms"] %}
+                                                <span class="syn">
+                                                    {% if synonym_type != "" %}
+                                                        <br>
+                                                        <span class="syn_type">{{synonym_type}}: </span>
+                                                    {% endif %}
+                                                    {{", ".join(definition_item["synonyms"][synonym_type])}}
+                                                </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if translation is not none and "translations" in translation %}
+                    <div class="translations">
+                        {% for def_type, translations in translation["translations"].items() %}
+                            <span class="def_type">{{def_type}}</span>
+                            <ul>
+                                {% for word, word_translations in translations.items() %}
+                                    <li>
+                                        <span class="syn_type">{{word}}:</span>
+                                        <span class="syn">{{", ".join(word_translations["words"])}}</span>
+                                        <span class="syn_type">{{word_translations["frequency"]}}</span>
+                                    </li>
+                                    <br>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
 
         </form>
 

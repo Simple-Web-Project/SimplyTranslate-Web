@@ -125,6 +125,7 @@ async def api_translate():
 
     return engine.translate(text, from_language=from_language, to_language=to_language)
 
+
 # @app.route("/api/translate_advanced/", methods=["GET", "POST"])
 # async def api_translate_advanced():
 #     if request.method == "POST":
@@ -133,7 +134,7 @@ async def api_translate():
 #         args = request.args
 
 #     engine_name = args.get("engine")
-    
+
 #     text = args.get("text")
 #     from_language = args.get("from")
 #     to_language = args.get("to")
@@ -152,6 +153,7 @@ async def api_translate():
 #     if engine_name != "google":
 #         return ""
 #     return engine.translate(text, from_language=from_language, to_language=to_language)
+
 
 @app.route("/prefs", methods=["POST", "GET"])
 async def prefs():
@@ -195,6 +197,7 @@ async def api_source_languages():
         lang_list += f"{lang}\n{langs[lang]}\n"
 
     return lang_list
+
 
 @app.route("/api/target_languages/")
 async def api_target_languages():
@@ -304,11 +307,15 @@ async def index():
         inp = request.args.get("text", "")
 
         from_lang = to_full_name(
-            request.args.get("sl") or request.cookies.get("from_lang") or "auto", engine, "source"
+            request.args.get("sl") or request.cookies.get("from_lang") or "auto",
+            engine,
+            "source",
         )
 
         to_lang = to_full_name(
-            request.args.get("tl") or request.cookies.get("to_lang") or "en", engine, "target"
+            request.args.get("tl") or request.cookies.get("to_lang") or "en",
+            engine,
+            "target",
         )
 
         could_not_switch_languages = str_to_bool(
@@ -345,19 +352,18 @@ async def index():
             tts_from = f"/api/tts/?{urlencode(params)}"
         if translation is not None:
             if len(translation) > 0:
-                params = {"engine": engine_name, "lang": to_l_code, "text": translation}
+                params = {
+                    "engine": engine_name,
+                    "lang": to_l_code,
+                    "text": translation["translated-text"],
+                }
                 tts_to = f"/api/tts/?{urlencode(params)}"
 
     prefs = dict_to_prefs(request.cookies)
 
-    html_template = "index.html"
-
-    if engine_name == "google":
-        html_template = "google.html"
-
     response = await make_response(
         await render_template(
-            html_template,
+            "index.html",
             inp=inp,
             translation=translation,
             from_l=from_lang,
