@@ -33,6 +33,10 @@ uvicorn main:app --port 5000
 
 ### Configuration
 You can configure SimplyTranslate by editing these files:
+Either this in the project directory:
+```
+config.conf
+```
 Shared Between all supported SimplyTranslate Frontends (like simplytranslate_gemini):
 ```
 /etc/simplytranslate/shared.conf

@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
     config = ConfigParser()
 
-    config_paths = ["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"]
+    config_paths = ["config.conf", "/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"]
 
     if args.config != None:
         if os.path.isfile(args.config):
