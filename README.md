@@ -16,7 +16,7 @@ If you want to add your own instance here, please either send me an email direct
 ```sh
 git clone https://git.sr.ht/~metalune/simplytranslate_web
 cd simplytranslate_web
-``` 
+```
 
 ### Install the dependencies
 ```sh
@@ -32,12 +32,15 @@ uvicorn main:app --port 5000
 ```
 
 ### Configuration
-You can configurate SimplyTranslate by editing these files:
-
-Shared Between all supported SimplyTranslate Frontends (like simplytranslate_gemini): `/etc/simplytranslate/shared.conf`
-
-Configuration file specifically for this frontend: `/etc/simplytranslate/web.conf`
-
+You can configure SimplyTranslate by editing these files:
+Shared Between all supported SimplyTranslate Frontends (like simplytranslate_gemini):
+```
+/etc/simplytranslate/shared.conf
+```
+Configuration file specifically for this frontend:
+```
+/etc/simplytranslate/web.conf
+```
 Or if you want to specify your own config file path you can just pass the argument `-c` or `--config`
 
 ## How to contribute
