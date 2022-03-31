@@ -8,6 +8,8 @@ from quart import (
     Response,
 )
 from configparser import ConfigParser
+import argparse
+import os
 from urllib.parse import urlencode
 from wsgiref.util import FileWrapper
 from io import BytesIO
@@ -21,42 +23,7 @@ from simplytranslate_engines.utils import *
 
 import requests
 
-config = ConfigParser()
-
-config.read(["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"])
-
 engines = []
-
-if config.getboolean("google", "Enabled", fallback=True):
-    engines.append(GoogleTranslateEngine())
-
-if config.getboolean("deepl", "Enabled", fallback=False):
-    engines.append(DeeplEngine())
-
-if config.getboolean("iciba", "Enabled", fallback=False):
-    engines.append(IcibaTranslateEngine())
-
-if config.getboolean("reverso", "Enabled", fallback=False):
-    engines.append(ReversoTranslateEngine())
-
-libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
-
-if libretranslate_enabled is None:
-    print(
-        "LibreTranslate is disabled by default; please edit the config file to explicitly state whether it is enabled or not"
-    )
-
-if libretranslate_enabled:
-    engines.append(
-        LibreTranslateEngine(
-            config["libre"]["Instance"],
-            # `ApiKey` is not required, so use `get` to get `None` as fallback.
-            config["libre"].get("ApiKey"),
-        )
-    )
-
-if not engines:
-    raise Exception("All translation engines are disabled")
 
 app = Quart(__name__)
 
@@ -391,6 +358,54 @@ async def index():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--config", help="Specify path of config file", type=str)
+    args = parser.parse_args()
+
+    config = ConfigParser()
+
+    config_paths = ["/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"]
+
+    if args.config != None:
+        if os.path.isfile(args.config):
+            config_paths = [args.config]
+        else:
+            print("INFO: Ignoring specified config file path '" + str(args.config) + "' because the file doesn't exist.")
+
+    config.read(config_paths)
+
+    if config.getboolean("google", "Enabled", fallback=True):
+        engines.append(GoogleTranslateEngine())
+
+    if config.getboolean("deepl", "Enabled", fallback=False):
+        engines.append(DeeplEngine())
+
+    if config.getboolean("iciba", "Enabled", fallback=False):
+        engines.append(IcibaTranslateEngine())
+
+    if config.getboolean("reverso", "Enabled", fallback=False):
+        engines.append(ReversoTranslateEngine())
+
+    libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
+
+    if libretranslate_enabled is None:
+        print(
+            "LibreTranslate is disabled by default; please edit the config file to explicitly state whether it is enabled or not"
+        )
+
+    if libretranslate_enabled:
+        engines.append(
+            LibreTranslateEngine(
+                config["libre"]["Instance"],
+                # `ApiKey` is not required, so use `get` to get `None` as fallback.
+                config["libre"].get("ApiKey"),
+            )
+        )
+
+    if not engines:
+        raise Exception("All translation engines are disabled")
+
+
     app.run(
         port=config.getint("network", "port", fallback=5000),
         host=str(config.get("network", "host", fallback="0.0.0.0")),
