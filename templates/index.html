@@ -26,6 +26,15 @@
         <meta charset="UTF-8">
 
         <style>
+        .center {
+            display: flex;
+            justify-content: center;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
         .wrap {
             display: flex;
             flex-wrap: wrap;
@@ -194,15 +203,13 @@
 
     <body>
 
-        <center>
-            <header><h1>SimplyTranslate</h1></header>
-        </center>
+        <header class="center-text"><h1>SimplyTranslate</h1></header>
 
         <form action="/?engine={{ engine }}" method="POST" id="translation-form">
 
             <!-- engine buttons -->
             {% if engines|length > 1 %}
-                <center>
+                <div class="center">
                     Translation Engine
                     {% for _engine in engines %}
                         <a style="
@@ -225,7 +232,7 @@
                             |
                         {% endif %}
                     {% endfor %}
-                </center>
+                </div>
                 <br>
             {% endif %}
 
@@ -257,9 +264,9 @@
             </div>
 
             {% if could_not_switch_languages %}
-                <center id="could_not_switch_languages_text">
+                <div class="center-text" id="could_not_switch_languages_text">
                     Sorry, {{ engine }} doesn't support switching from autodetect.
-                </center>
+                </div>
                 <br>
             {% endif %}
 
@@ -270,11 +277,11 @@
                     <!-- TTS for the input text -->
                     {%- if tts_enabled and tts_from is not none -%}
                         <br>
-                        <center>
+                        <div class="center">
                             <audio controls>
                                 <source type="audio/mpeg" src="{{ tts_from }}">
                             </audio>
-                        </center>
+                        </div>
                     {%- endif -%}
                 </div>
 
@@ -287,26 +294,28 @@
                     <!-- TTS for the output text -->
                     {%- if tts_enabled and tts_to is not none -%}
                         <br>
-                        <center>
+                        <div class="center">
                             <audio controls>
                                 <source type="audio/mpeg" src="{{ tts_to }}">
                             </audio>
-                        </center>
+                        </div>
                     {%- endif -%}
                 </div>
             </div>
 
             <br>
 
-            <center>
+            <div class="center">
                 <!-- translate button -->
                 <button type="submit">Translate with {{ engine }}!</button>
+            </div>
 
-                <br>
-                <br>
+            <br>
+
+            <div class="center-text">
                 <!-- link to share translation -->
                 <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
-            </center>
+            </div>
 
             <br>
 
@@ -370,9 +379,9 @@
         <br>
 
         <footer>
-            <center>
+            <div class="center-text">
                 <a href="/prefs">Preferences</a> | <a target="_new" href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
-            </center>
+            </div>
         </footer>
 
         <script>
