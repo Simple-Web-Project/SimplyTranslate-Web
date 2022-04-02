@@ -27,11 +27,6 @@
 
         <style>
         .center {
-            display: flex;
-            justify-content: center;
-        }
-
-        .center-text {
             text-align: center;
         }
 
@@ -202,8 +197,7 @@
     </head>
 
     <body>
-
-        <header class="center-text"><h1>SimplyTranslate</h1></header>
+        <header class="center"><h1>SimplyTranslate</h1></header>
 
         <form action="/?engine={{ engine }}" method="POST" id="translation-form">
 
@@ -218,14 +212,7 @@
                                     text-decoration: underline;
                                   {% endif %}
                             " href="/?engine={{ _engine.name }}">
-                            {# These hyphens remove whitespace before/after the block.
-                               They're here to remove the trailing space in the Google
-                               engine link, which gets on yours truly's nerves.
-                               I tried to put them just at the end only (i.e. `-%}`),
-                               but it didn't work for whatever reason.
-                            #}
-
-                            {{ _engine.display_name}}
+                            {{ _engine.display_name -}}
                         </a>
 
                         {% if not loop.last %}
@@ -264,7 +251,7 @@
             </div>
 
             {% if could_not_switch_languages %}
-                <div class="center-text" id="could_not_switch_languages_text">
+                <div class="center" id="could_not_switch_languages_text">
                     Sorry, {{ engine }} doesn't support switching from autodetect.
                 </div>
                 <br>
@@ -312,7 +299,7 @@
 
             <br>
 
-            <div class="center-text">
+            <div class="center">
                 <!-- link to share translation -->
                 <a href="/?engine={{ engine }}&text={{ inp|urlencode }}&sl={{ from_l_code }}&tl={{ to_l_code }}">Copy this link to share this translation with others</a>
             </div>
@@ -378,10 +365,8 @@
         <br>
         <br>
 
-        <footer>
-            <div class="center-text">
-                <a href="/prefs">Preferences</a> | <a href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
-            </div>
+        <footer class="center">
+            <a href="/prefs">Preferences</a> | <a href="https://simple-web.org/projects/simplytranslate.html">Project Page</a> | <a href="https://simple-web.org">Simple Web Project</a>
         </footer>
 
         <script>
