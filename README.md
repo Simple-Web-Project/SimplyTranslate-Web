@@ -14,7 +14,7 @@ If you want to add your own instance here, please either send me an email direct
 
 ### Clone the repository
 ```sh
-git clone https://git.sr.ht/~metalune/simplytranslate_web
+git clone https://codeberg.org/SimpleWeb/SimplyTranslate-Web
 cd simplytranslate_web
 ```
 
@@ -49,7 +49,7 @@ Or if you want to specify your own config file path you can just pass the argume
 
 ## How to contribute
 1. Setup git-email: https://git-send-email.io
-2. Clone the repo you want: `git clone https://git.sr.ht/~metalune/simplytranslate_web`
+2. Clone the repo you want: `git clone https://codeberg.org/SimpleWeb/SimplyTranslate-Web`
 3. Branch it: `git checkout -b my-cool-changes`
 4. Add your changes: `git add .` and commit them `git commit -m "My Cool Changes"`
 5. Set mail-to: `git config sendemail.to '~metalune/simplytranslate-devel@lists.sr.ht'`
