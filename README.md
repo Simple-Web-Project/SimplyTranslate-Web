@@ -15,7 +15,7 @@ If you want to add your own instance here, please either send me an email direct
 ### Clone the repository
 ```sh
 git clone https://codeberg.org/SimpleWeb/SimplyTranslate-Web
-cd simplytranslate_web
+cd SimplyTranslate-Web
 ```
 
 ### Install the dependencies
@@ -37,7 +37,7 @@ Either this in the project directory:
 ```
 config.conf
 ```
-Shared Between all supported SimplyTranslate Frontends (like simplytranslate_gemini):
+Shared Between all supported SimplyTranslate Frontends (like SimplyTranslate-Gemini):
 ```
 /etc/simplytranslate/shared.conf
 ```
@@ -68,12 +68,12 @@ To get in contact with the developers, visit us on the #simple-web IRC channel o
 
 ## License
 
-simplytranslate_web is free software: you can redistribute it and/or modify
+SimplyTranslate-Web is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-simplytranslate_web is distributed in the hope that it will be useful,
+SimplyTranslate-Web is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
