@@ -16,7 +16,6 @@ from io import BytesIO
 
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
-from simplytranslate_engines.deepl import DeeplEngine
 from simplytranslate_engines.icibatranslate import IcibaTranslateEngine
 from simplytranslate_engines.reverso import ReversoTranslateEngine
 from simplytranslate_engines.utils import *
@@ -28,9 +27,6 @@ def read_config():
 
     if config.getboolean("google", "Enabled", fallback=True):
         engines.append(GoogleTranslateEngine())
-
-    if config.getboolean("deepl", "Enabled", fallback=False):
-        engines.append(DeeplEngine())
 
     if config.getboolean("iciba", "Enabled", fallback=False):
         engines.append(IcibaTranslateEngine())
@@ -103,7 +99,7 @@ def dict_to_prefs(d, **kwargs):
     "/translate/<string:from_language>/<string:to_language>/<string:input_text>/",
 )
 async def translate(from_language, to_language, input_text):
-    return engines[0].translate(
+    return await engines[0].translate(
         input_text, from_language=from_language, to_language=to_language
     )
 
@@ -128,10 +124,10 @@ async def api_translate():
 
     engine = get_engine(engine_name, engines, engines[0])
 
-    from_language = to_lang_code(from_language, engine)
-    to_language = to_lang_code(to_language, engine)
+    from_language = await to_lang_code(from_language, engine)
+    to_language = await to_lang_code(to_language, engine)
 
-    return engine.translate(text, from_language=from_language, to_language=to_language)
+    return await engine.translate(text, from_language=from_language, to_language=to_language)
 
 
 # @app.route("/api/translate_advanced/", methods=["GET", "POST"])
@@ -199,7 +195,7 @@ async def api_source_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    langs = engine.get_supported_source_languages()
+    langs = await engine.get_supported_source_languages()
     lang_list = ""
     for lang in langs:
         lang_list += f"{lang}\n{langs[lang]}\n"
@@ -212,7 +208,7 @@ async def api_target_languages():
     engine_name = request.args.get("engine")
     engine = get_engine(engine_name, engines, engines[0])
 
-    langs = engine.get_supported_target_languages()
+    langs = await engine.get_supported_target_languages()
     lang_list = ""
     for lang in langs:
         lang_list += f"{lang}\n{langs[lang]}\n"
@@ -228,9 +224,9 @@ async def api_tts():
 
     engine = get_engine(engine_name, engines, engines[0])
 
-    language = to_lang_code(language, engine)
+    language = await to_lang_code(language, engine)
 
-    url = engine.get_tts(text, language)
+    url = await engine.get_tts(text, language)
 
     USER_AGENT = "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
 
@@ -255,11 +251,11 @@ async def switchlanguages():
     engine = get_engine(engine_name, engines, engines[0])
 
     text = form.get("input", "")
-    from_lang = to_lang_code(form.get("from_language", "Autodetect"), engine)
-    to_lang = to_lang_code(form.get("to_language", "English"), engine)
+    from_lang = await to_lang_code(form.get("from_language", "Autodetect"), engine)
+    to_lang = await to_lang_code(form.get("to_language", "English"), engine)
 
     if from_lang == "auto":
-        detected_lang = engine.detect_language(text)
+        detected_lang = await engine.detect_language(text)
 
         if detected_lang is not None:
             from_lang = detected_lang
@@ -314,13 +310,13 @@ async def index():
         # support google format
         inp = request.args.get("text", "")
 
-        from_lang = to_full_name(
+        from_lang = await to_full_name(
             request.args.get("sl") or request.cookies.get("from_lang") or "auto",
             engine,
             "source",
         )
 
-        to_lang = to_full_name(
+        to_lang = await to_full_name(
             request.args.get("tl") or request.cookies.get("to_lang") or "en",
             engine,
             "target",
@@ -342,9 +338,9 @@ async def index():
     to_l_code = None
 
     if not (inp == "" or inp.isspace()):
-        from_l_code = to_lang_code(from_lang, engine)
-        to_l_code = to_lang_code(to_lang, engine)
-        translation = engine.translate(
+        from_l_code = await to_lang_code(from_lang, engine)
+        to_l_code = await to_lang_code(to_lang, engine)
+        translation = await engine.translate(
             inp,
             to_language=to_l_code,
             from_language=from_l_code,
@@ -354,7 +350,7 @@ async def index():
     tts_from = None
     tts_to = None
     # check if the engine even supports TTS
-    if engine.get_tts("auto", "test") is not None:
+    if await engine.get_tts("auto", "test") is not None:
         if len(inp) > 0:
             params = {"engine": engine_name, "lang": from_l_code, "text": inp}
             tts_from = f"/api/tts/?{urlencode(params)}"
@@ -383,8 +379,8 @@ async def index():
             engine=engine.name,
             # engines=[engine.name for engine in engines],
             engines=engines,
-            supported_source_languages=engine.get_supported_source_languages(),
-            supported_target_languages=engine.get_supported_target_languages(),
+            supported_source_languages=await engine.get_supported_source_languages(),
+            supported_target_languages=await engine.get_supported_target_languages(),
             use_text_fields=prefs["use_text_fields"],
             tts_enabled=prefs["tts_enabled"],
             could_not_switch_languages=could_not_switch_languages,
@@ -392,8 +388,8 @@ async def index():
     )
 
     if request.method == "POST":
-        response.set_cookie("from_lang", to_lang_code(from_lang, engine))
-        response.set_cookie("to_lang", to_lang_code(to_lang, engine))
+        response.set_cookie("from_lang", await to_lang_code(from_lang, engine))
+        response.set_cookie("to_lang", await to_lang_code(to_lang, engine))
 
     return response
 
