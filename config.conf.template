@@ -16,7 +16,9 @@ ApiKey = [REDACTED]
 Enabled = True
 
 [deepl]
-Enabled = True
+# Deepl Translate does not support async as of right now, it will block all other requests
+# while it's processing a Deepl Requests, please enable this with caution!
+Enabled = False
 
 [iciba]
 # ICIBA Translate (a.k.a. PowerWord) is disabled by default.
