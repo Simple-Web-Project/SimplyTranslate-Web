@@ -17,7 +17,7 @@ from io import BytesIO
 from simplytranslate_engines.googletranslate import GoogleTranslateEngine
 from simplytranslate_engines.libretranslate import LibreTranslateEngine
 from simplytranslate_engines.icibatranslate import IcibaTranslateEngine
-from simplytranslate_engines.deepl import DeeplEngie
+from simplytranslate_engines.deepl import DeeplEngine
 from simplytranslate_engines.reverso import ReversoTranslateEngine
 from simplytranslate_engines.utils import *
 
