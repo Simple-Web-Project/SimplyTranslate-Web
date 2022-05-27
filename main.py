@@ -23,6 +23,7 @@ from simplytranslate_engines.utils import *
 
 import requests
 
+
 def read_config():
     config.read(config_paths)
 
@@ -60,7 +61,11 @@ def read_config():
 
 config = ConfigParser()
 engines = []
-config_paths = ["config.conf", "/etc/simplytranslate/shared.conf", "/etc/simplytranslate/web.conf"]
+config_paths = [
+    "config.conf",
+    "/etc/simplytranslate/shared.conf",
+    "/etc/simplytranslate/web.conf",
+]
 
 # This ain't clean, but it works.
 if __name__ != "__main__":
@@ -131,36 +136,9 @@ async def api_translate():
     from_language = await to_lang_code(from_language, engine)
     to_language = await to_lang_code(to_language, engine)
 
-    return await engine.translate(text, from_language=from_language, to_language=to_language)
-
-
-# @app.route("/api/translate_advanced/", methods=["GET", "POST"])
-# async def api_translate_advanced():
-#     if request.method == "POST":
-#         args = await request.form
-#     elif request.method == "GET":
-#         args = request.args
-
-#     engine_name = args.get("engine")
-
-#     text = args.get("text")
-#     from_language = args.get("from")
-#     to_language = args.get("to")
-
-#     if from_language == None:
-#         from_language = "auto"
-
-#     if to_language == None:
-#         to_language = "en"
-
-#     engine = get_engine(engine_name, engines, engines[0])
-
-#     from_language = to_lang_code(from_language, engine)
-#     to_language = to_lang_code(to_language, engine)
-
-#     if engine_name != "google":
-#         return ""
-#     return engine.translate(text, from_language=from_language, to_language=to_language)
+    return await engine.translate(
+        text, from_language=from_language, to_language=to_language
+    )
 
 
 @app.route("/prefs", methods=["POST", "GET"])
@@ -200,11 +178,7 @@ async def api_source_languages():
     engine = get_engine(engine_name, engines, engines[0])
 
     langs = await engine.get_supported_source_languages()
-    lang_list = ""
-    for lang in langs:
-        lang_list += f"{lang}\n{langs[lang]}\n"
-
-    return lang_list
+    return "".join(f"{lang}\n{langs[lang]}\n" for lang in langs)
 
 
 @app.route("/api/target_languages/")
@@ -213,11 +187,8 @@ async def api_target_languages():
     engine = get_engine(engine_name, engines, engines[0])
 
     langs = await engine.get_supported_target_languages()
-    lang_list = ""
-    for lang in langs:
-        lang_list += f"{lang}\n{langs[lang]}\n"
 
-    return lang_list
+    return "".join(f"{lang}\n{langs[lang]}\n" for lang in langs)
 
 
 @app.route("/api/tts/")
@@ -355,7 +326,7 @@ async def index():
     tts_to = None
     # check if the engine even supports TTS
     if await engine.get_tts("auto", "test") is not None:
-        if len(inp) > 0:
+        if inp:
             params = {"engine": engine_name, "lang": from_l_code, "text": inp}
             tts_from = f"/api/tts/?{urlencode(params)}"
         if translation is not None:
@@ -381,7 +352,6 @@ async def index():
             to_l=to_lang,
             to_l_code=to_l_code,
             engine=engine.name,
-            # engines=[engine.name for engine in engines],
             engines=engines,
             supported_source_languages=await engine.get_supported_source_languages(),
             supported_target_languages=await engine.get_supported_target_languages(),
@@ -400,18 +370,20 @@ async def index():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", help="Specify path of config file", type=str)
+    parser.add_argument("-c", "--config", help="Specify path of config file")
     args = parser.parse_args()
 
-    if args.config != None:
+    if args.config is not None:
         if os.path.isfile(args.config):
             config_paths = [args.config]
         else:
-            print("INFO: Ignoring specified config file path '" + str(args.config) + "' because the file doesn't exist.")
+            print(
+                f"INFO: Ignoring specified config file path '{args.config}' because the file doesn't exist."
+            )
 
     read_config()
 
     app.run(
         port=config.getint("network", "port", fallback=5000),
-        host=str(config.get("network", "host", fallback="0.0.0.0")),
+        host=config.get("network", "host", fallback="0.0.0.0"),
     )
