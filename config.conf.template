@@ -25,7 +25,7 @@ Enabled = False
 Enabled = False
 
 [reverso]
-Enabled = True
+Enabled = False
 
 [network]
 port = 5000
