@@ -38,14 +38,7 @@ def read_config():
     if config.getboolean("reverso", "Enabled", fallback=False):
         engines.append(ReversoTranslateEngine())
 
-    libretranslate_enabled = config.getboolean("libre", "Enabled", fallback=None)
-
-    if libretranslate_enabled is None:
-        print(
-            "LibreTranslate is disabled by default; please edit the config file to explicitly state whether it is enabled or not"
-        )
-
-    if libretranslate_enabled:
+    if config.getboolean("libre", "Enabled", fallback=False):
         engines.append(
             LibreTranslateEngine(
                 config["libre"]["Instance"],
