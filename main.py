@@ -256,8 +256,8 @@ async def switchlanguages():
         ),
     )
 
-    response.set_cookie("from_lang", to_lang)
-    response.set_cookie("to_lang", from_lang)
+    response.set_cookie("from_lang", from_lang)
+    response.set_cookie("to_lang", to_lang)
 
     return response
 
