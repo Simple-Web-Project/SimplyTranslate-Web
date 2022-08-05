@@ -58,10 +58,6 @@ Or if you want to specify your own config file path you can just pass the argume
 ## API
 [Documentation](./api.md)
 
-## Other projects like this
-* [gtranslate](https://git.sr.ht/~yerinalexey/gtranslate)
-* [lingva translate](https://github.com/TheDavidDelta/lingva-translate)
-
 ## Contact
 
 To get in contact with the developers, visit us on the #simple-web IRC channel on [Libera.Chat](https://libera.chat)
