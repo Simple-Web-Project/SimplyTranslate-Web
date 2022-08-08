@@ -378,18 +378,16 @@
                 }
             });
             // @license-end
-        </script>
-        <script>
+
             // Auto resize textarea to fit words inside it without need to scroll -- Thanks to: https://stackoverflow.com/a/25621277
-            const input = document.getElementById("input");
-            const output = document.getElementById("output");
-            input.setAttribute("style", "height:" + (output.scrollHeight) + "px;overflow-y:scroll;");
-            output.setAttribute("style", "height:" + (output.scrollHeight) + "px;overflow-y:scroll;");
-            input.addEventListener("input", OnInput);
-            function OnInput(e) {
+            var input = document.getElementById("input");
+            var output = document.getElementById("output");
+            input.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+            output.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+            input.addEventListener("input", function(e) {
                 this.style.height = 150 + "px";
-                this.style.height = (this.scrollHeight) + "px";
-            }
+                this.style.height = this.scrollHeight + "px";
+            });
         </script>
     </body>
 </html>
