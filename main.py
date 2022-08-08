@@ -126,8 +126,8 @@ async def api_translate():
 
     engine = get_engine(engine_name, engines, engines[0])
 
-    from_language = await to_lang_code(from_language, engine)
-    to_language = await to_lang_code(to_language, engine)
+    from_language = await to_lang_code(from_language, engine, type_="source")
+    to_language = await to_lang_code(to_language, engine, type_="target")
 
     return await engine.translate(
         text, from_language=from_language, to_language=to_language
@@ -192,7 +192,9 @@ async def api_tts():
 
     engine = get_engine(engine_name, engines, engines[0])
 
-    language = await to_lang_code(language, engine)
+    language = await to_lang_code(
+        language, engine, type_="source"
+    ) or await to_lang_code(language, engine, type_="target")
 
     url = await engine.get_tts(text, language)
 
@@ -219,8 +221,12 @@ async def switchlanguages():
     engine = get_engine(engine_name, engines, engines[0])
 
     text = form.get("input", "")
-    from_lang = await to_lang_code(form.get("from_language", "Autodetect"), engine)
-    to_lang = await to_lang_code(form.get("to_language", "English"), engine)
+    from_lang = await to_lang_code(
+        form.get("from_language", "Autodetect"), engine, type_="source"
+    )
+    to_lang = await to_lang_code(
+        form.get("to_language", "English"), engine, type_="target"
+    )
 
     if from_lang == "auto":
         detected_lang = await engine.detect_language(text)
@@ -306,8 +312,8 @@ async def index():
     to_l_code = None
 
     if not (inp == "" or inp.isspace()):
-        from_l_code = await to_lang_code(from_lang, engine)
-        to_l_code = await to_lang_code(to_lang, engine)
+        from_l_code = await to_lang_code(from_lang, engine, type_="source")
+        to_l_code = await to_lang_code(to_lang, engine, type_="target")
         translation = await engine.translate(
             inp,
             to_language=to_l_code,
@@ -355,8 +361,12 @@ async def index():
     )
 
     if request.method == "POST":
-        response.set_cookie("from_lang", await to_lang_code(from_lang, engine))
-        response.set_cookie("to_lang", await to_lang_code(to_lang, engine))
+        response.set_cookie(
+            "from_lang", await to_lang_code(from_lang, engine, type_="source")
+        )
+        response.set_cookie(
+            "to_lang", await to_lang_code(to_lang, engine, type_="target")
+        )
 
     return response
 
