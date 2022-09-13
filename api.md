@@ -1,7 +1,7 @@
 # SimplyTranslate Web API
 ## How to access the API
 By going to the path `/api/`.\
-Ex: https://simplytranslate.org/api/.
+Ex: https://simplytranslate.org/api/target_languages.
 
 ## Translate
 Path `/api/translate/`
