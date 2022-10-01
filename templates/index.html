@@ -52,6 +52,8 @@
 
         .item-wrapper {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             width: 450px;
             margin: 5px 10px;
         }
@@ -277,7 +279,6 @@
                     <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="Enter Text Here">{{ inp }}</textarea>
                     <!-- TTS for the input text -->
                     {%- if tts_enabled and tts_from is not none -%}
-                        <br>
                         <div class="center">
                             <audio controls>
                                 <source type="audio/mpeg" src="{{ tts_from }}">
@@ -294,7 +295,6 @@
                     </textarea>
                     <!-- TTS for the output text -->
                     {%- if tts_enabled and tts_to is not none -%}
-                        <br>
                         <div class="center">
                             <audio controls>
                                 <source type="audio/mpeg" src="{{ tts_to }}">
