@@ -62,6 +62,13 @@ Or if you want to specify your own config file path you can just pass the argume
 
 To get in contact with the developers, visit us on the #simple-web IRC channel on [Libera.Chat](https://libera.chat)
 
+## Legal Notice
+SimplyTranslate does not host any content. All content on SimplyTranslate is from Google Translate or DeepL or ICIBA or Reverso or LibreTranslate. SimplyTranslate is not affiliated with Google Translate or DeepL or ICIBA or Reverso or LibreTranslate that SimplyTranslate relays.
+
+Trademarks belong to their respective owners. Google Translate is a trademark of Google LLC. DeepL is a trademark of DeepL SE. Reverso is a trademark of Reverso.
+
+The creators of this repository assume no liability for the accuracy and timeliness of any information provided above. Trademark owner information was researched to the best of the author's knowledge at the time of curation and may be outdated or incorrect.
+
 ## License
 
 SimplyTranslate-Web is free software: you can redistribute it and/or modify
