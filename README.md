@@ -63,7 +63,7 @@ Or if you want to specify your own config file path you can just pass the argume
 To get in contact with the developers, visit us on the #simple-web IRC channel on [Libera.Chat](https://libera.chat)
 
 ## Legal Notice
-SimplyTranslate does not host any content. All content on SimplyTranslate is from Google Translate or DeepL or ICIBA or Reverso or LibreTranslate. SimplyTranslate is not affiliated with Google Translate or DeepL or ICIBA or Reverso or LibreTranslate that SimplyTranslate relays.
+SimplyTranslate does not host any content. All content on SimplyTranslate is from Google Translate, DeepL, ICIBA, Reverso and LibreTranslate. SimplyTranslate is not affiliated with Google Translate, DeepL, ICIBA, Reverso or LibreTranslate that SimplyTranslate relays.
 
 Trademarks belong to their respective owners. Google Translate is a trademark of Google LLC. DeepL is a trademark of DeepL SE. Reverso is a trademark of Reverso. LibreTranslate is a trademark of LibreTranslate.
 
